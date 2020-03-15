@@ -1,14 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package dto;
+
+import entities.CityInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author cahit
  */
 public class CitiesInfoDTO {
+    
+  List<CityInfoDTO> citiesInfo = new ArrayList();  
+    
+  public CitiesInfoDTO(List<CityInfo> cityInfoes ){
+      for (CityInfo cityInfo : cityInfoes) {
+         citiesInfo.add(new CityInfoDTO(cityInfo));
+      }
+  }
+
+    public List<CityInfoDTO> getCitiesInfo() {
+        return citiesInfo;
+    }
+
+    public void setCitiesInfo(List<CityInfoDTO> citiesInfo) {
+        this.citiesInfo = citiesInfo;
+    }
     
 }
