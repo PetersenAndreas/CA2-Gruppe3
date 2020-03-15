@@ -1,6 +1,6 @@
 package facades;
 
-import entities.Person;
+import entities.Hobby;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,14 +13,14 @@ import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
-public class PersonFacadeTest {
+public class HobbyFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static PersonFacade facade;
-    private static Person person1, person2, person3, person4;
-    private static Person[] personArray;
+    private static HobbyFacade facade;
+    private static Hobby hobby1, hobby2, hobby3, hobby4;
+    private static Hobby[] hobbyArray;
 
-    public PersonFacadeTest() {}
+    public HobbyFacadeTest() {}
 
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
@@ -29,13 +29,13 @@ public class PersonFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-        facade = PersonFacade.getPersonFacade(emf);
+        facade = HobbyFacade.getHobbyFacade(emf);
     }
 
     @BeforeAll
     public static void setUpClassV2() {
        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST,Strategy.DROP_AND_CREATE);
-       facade = PersonFacade.getPersonFacade(emf);
+       facade = HobbyFacade.getHobbyFacade(emf);
     }
 
     @AfterAll
@@ -48,27 +48,27 @@ public class PersonFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            person1 = new Person("Michael", "Korsgaard", "MichaelKorsgaard@gmail.com");
-            person2 = new Person("Andreas", "Petersen", "AndreasPetersen@gmail.com");
-            person3 = new Person("Cahit", "Bakirci", "CahitBakirci@gmail.com");
-            person4 = new Person("Marcus", "Johnsen", "MarcusJohnsen@gmail.com");
-            em.persist(person1);
-            em.persist(person2);
-            em.persist(person3);
-            em.persist(person4);
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            hobby1 = new Hobby("Ishockey", "holdsport på is med en puck og en stav");
+            hobby2 = new Hobby("Basketball", "holdsport med to kurve og en orange bold");
+            hobby3 = new Hobby("Fodbold", "holdsport med to mål og en rigtig bold");
+            hobby4 = new Hobby("MMA", "enmandssport der handler om at tæve modstanderen");
+            em.persist(hobby1);
+            em.persist(hobby2);
+            em.persist(hobby3);
+            em.persist(hobby4);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        personArray = new Person[]{person1, person2, person3, person4};
+        hobbyArray = new Hobby[]{hobby1, hobby2, hobby3, hobby4};
     }
     
     private static void emptyDatabase() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -81,9 +81,7 @@ public class PersonFacadeTest {
     }
 
     @Test
-    public void testPersonFacade() {
-        long result = facade.getPersonCount();
-        int expectedResult = personArray.length;
-        assertEquals(expectedResult, result);
+    public void testHobbyFacade() {
+        assertEquals(4, facade.getHobbyCount(), "Expects four rows in the database");
     }
 }

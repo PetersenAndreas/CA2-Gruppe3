@@ -2,19 +2,18 @@ package facades;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import entities.Person;
 
-public class PersonFacade {
+public class HobbyFacade {
 
-    private static PersonFacade instance;
+    private static HobbyFacade instance;
     private static EntityManagerFactory emf;
     
-    private PersonFacade() {}
+    private HobbyFacade() {}
     
-    public static PersonFacade getPersonFacade(EntityManagerFactory _emf) {
+    public static HobbyFacade getHobbyFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new PersonFacade();
+            instance = new HobbyFacade();
         }
         return instance;
     }
@@ -23,11 +22,11 @@ public class PersonFacade {
         return emf.createEntityManager();
     }
     
-    public long getPersonCount(){
+    public long getHobbyCount(){
         EntityManager em = getEntityManager();
         try{
-            long personCount = (long)em.createQuery("SELECT COUNT(p) FROM Person p").getSingleResult();
-            return personCount;
+            long hobbyCount = (long)em.createQuery("SELECT COUNT(p) FROM Hobby p").getSingleResult();
+            return hobbyCount;
         }finally{  
             em.close();
         }

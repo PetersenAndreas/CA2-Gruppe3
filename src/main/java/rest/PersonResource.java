@@ -14,8 +14,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.junit.jupiter.api.Disabled;
 
-//Todo Remove or change relevant parts before ACTUAL use
+@Disabled
 @Path("person")
 public class PersonResource {
 
@@ -26,10 +27,7 @@ public class PersonResource {
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
     
-    //An alternative way to get the EntityManagerFactory, whithout having to type the details all over the code
-    //EMF = EMF_Creator.createEntityManagerFactory(DbSelector.DEV, Strategy.CREATE);
-    
-    private static final PersonFacade FACADE =  PersonFacade.getFacadeExample(EMF);
+    private static final PersonFacade FACADE =  PersonFacade.getPersonFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
     @GET
@@ -37,14 +35,12 @@ public class PersonResource {
     public String demo() {
         return "{\"msg\":\"Hello World\"}";
     }
+    
     @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getRenameMeCount() {
-        long count = FACADE.getRenameMeCount();
-        //System.out.println("--------------->"+count);
-        return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
+    public String getPersonCount() {
+        long count = FACADE.getPersonCount();
+        return "{\"count\":"+count+"}";
     }
-
- 
 }

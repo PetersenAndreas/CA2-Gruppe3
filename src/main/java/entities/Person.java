@@ -1,12 +1,15 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
-
+import javax.persistence.OneToMany;
 
 @Entity
 @NamedQuery(name = "Person.deleteAllRows", query = "DELETE from Person")
@@ -16,22 +19,46 @@ public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private String email;
-    private String phone;
+    
+    @ManyToMany
+    private List<Hobby> hobbies = new ArrayList();
+    
+    @OneToMany(mappedBy = "person")
+    private List<Phone> phones = new ArrayList();
 
-    public Person(String fullName, String email, String phone) {
-        this.fullName = fullName;
+    public Person(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
-        this.phone = phone;
+    }
+    
+    public Person() {}
+    
+    public Long getId() {
+        return id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String fullName) {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -41,25 +68,4 @@ public class Person implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    
-    public Person() {
-    }
-        
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-   
 }
