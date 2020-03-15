@@ -16,7 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.junit.jupiter.api.Disabled;
 
-@Disabled
+//@Disabled
 @Path("person")
 public class PersonResource {
 
