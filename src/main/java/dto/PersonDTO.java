@@ -2,6 +2,7 @@ package dto;
 
 import entities.Person;
 import entities.Address;
+import entities.Hobby;
 import entities.Phone;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,11 @@ public class PersonDTO {
     private String cityName;
     private String zip;
     private List<String> hobbies = new ArrayList();
-    private List<Phone> phones = new ArrayList();
+    private PhonesDTO phones = new PhonesDTO();
 
     public PersonDTO(Long id, String firstName, String lastName, String email,
             String street, String cityName, String zip, List<String> hobbies,
-            List<Phone> phones) {
+            PhonesDTO phones) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,19 +36,20 @@ public class PersonDTO {
     public PersonDTO() {
     }
 
-    public PersonDTO(Person person, Address address, List<Phone> phones, HobbiesDTO hobbies) {
+    public PersonDTO(Person person) {
         this.id = person.getId();
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.email = person.getEmail();
-        this.street = address.getStreet();
-        this.cityName = address.getCityInfo().getCity();
-        this.zip = address.getCityInfo().getZipCode();
-        this.phones = phones;
-        for (HobbyDTO hobby : hobbies.getHobbies()) {
+        if (person.getAddress() != null) {
+            this.street = person.getAddress().getStreet();
+            this.cityName = person.getAddress().getCityInfo().getCity();
+            this.zip = person.getAddress().getCityInfo().getZipCode();
+        }
+        this.phones = new PhonesDTO(person.getPhones());
+        for (Hobby hobby : person.getHobbies()) {
             this.hobbies.add(hobby.getName());
         }
-
     }
 
     public Long getId() {
@@ -114,11 +116,11 @@ public class PersonDTO {
         this.hobbies = hobbies;
     }
 
-    public List<Phone> getPhones() {
+    public PhonesDTO getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
+    public void setPhones(PhonesDTO phones) {
         this.phones = phones;
     }
 
