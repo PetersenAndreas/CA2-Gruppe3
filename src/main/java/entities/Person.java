@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
 
@@ -19,7 +20,11 @@ public class Person implements Serializable {
     private String fullName;
     private String email;
     private String phone;
-
+    
+    @ManyToOne
+    private Address address;
+  
+    
     public Person(String fullName, String email, String phone) {
         this.fullName = fullName;
         this.email = email;
