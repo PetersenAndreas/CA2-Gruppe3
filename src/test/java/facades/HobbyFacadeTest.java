@@ -82,6 +82,8 @@ public class HobbyFacadeTest {
 
     @Test
     public void testHobbyFacade() {
-        assertEquals(4, facade.getHobbyCount(), "Expects four rows in the database");
+        long result = facade.getHobbyCount();
+        int expectedResult = hobbyArray.length;
+        assertEquals(expectedResult, result);
     }
 }

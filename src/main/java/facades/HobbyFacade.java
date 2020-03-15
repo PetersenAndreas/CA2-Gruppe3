@@ -25,7 +25,7 @@ public class HobbyFacade {
     public long getHobbyCount(){
         EntityManager em = getEntityManager();
         try{
-            long hobbyCount = (long)em.createQuery("SELECT COUNT(p) FROM Hobby p").getSingleResult();
+            long hobbyCount = (long)em.createQuery("SELECT COUNT(h) FROM Hobby h").getSingleResult();
             return hobbyCount;
         }finally{  
             em.close();

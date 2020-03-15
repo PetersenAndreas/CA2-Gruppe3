@@ -16,13 +16,13 @@ public class Phone implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int number;
+    private String number;
     private String description;
 
     @ManyToOne
     private Person person;
 
-    public Phone(int number, String description) {
+    public Phone(String number, String description) {
         this.number = number;
         this.description = description;
     }
@@ -37,11 +37,11 @@ public class Phone implements Serializable {
         this.id = id;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

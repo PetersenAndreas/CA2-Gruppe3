@@ -49,10 +49,10 @@ public class PhoneFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
-            phone1 = new Phone(68170285, "Michaels telefonnummer");
-            phone2 = new Phone(32719822, "Andreas' telefonnummer");
-            phone3 = new Phone(11785381, "Cahits telefonnummer");
-            phone4 = new Phone(28774631, "Marcus' telefonnummer");
+            phone1 = new Phone("68170285", "Michaels telefonnummer");
+            phone2 = new Phone("32719822", "Andreas' telefonnummer");
+            phone3 = new Phone("11785381", "Cahits telefonnummer");
+            phone4 = new Phone("28774631", "Marcus' telefonnummer");
             em.persist(phone1);
             em.persist(phone2);
             em.persist(phone3);
@@ -82,6 +82,8 @@ public class PhoneFacadeTest {
 
     @Test
     public void testPhoneFacade() {
-        assertEquals(4, facade.getPhoneCount(), "Expects four rows in the database");
+        long result = facade.getPhoneCount();
+        int expectedResult = phoneArray.length;
+        assertEquals(expectedResult, result);
     }
 }
