@@ -4,28 +4,17 @@ import entities.Hobby;
 
 public class HobbyDTO {
 
-    private Long id;
     private String name;
     private String description;
 
-    public HobbyDTO(Long id, String name, String description) {
-        this.id = id;
+    public HobbyDTO(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     public HobbyDTO(Hobby hobby) {
-        this.id = hobby.getId();
         this.name = hobby.getName();
         this.description = hobby.getDescription();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

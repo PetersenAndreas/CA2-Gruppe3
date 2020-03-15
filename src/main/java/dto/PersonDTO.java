@@ -1,10 +1,13 @@
 package dto;
 
 import entities.Person;
+import entities.Address;
+import entities.Phone;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDTO {
-    
+
     private Long id;
     private String firstName;
     private String lastName;
@@ -12,12 +15,12 @@ public class PersonDTO {
     private String street;
     private String cityName;
     private String zip;
-    private List<String> hobbies;
-    private List<PhoneDTO> phones;
+    private List<String> hobbies = new ArrayList();
+    private List<Phone> phones = new ArrayList();
 
-    public PersonDTO(Long id, String firstName, String lastName, String email, 
-            String street, String cityName, String zip, List<String> hobbies, 
-            List<PhoneDTO> phones) {
+    public PersonDTO(Long id, String firstName, String lastName, String email,
+            String street, String cityName, String zip, List<String> hobbies,
+            List<Phone> phones) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,17 +31,23 @@ public class PersonDTO {
         this.hobbies = hobbies;
         this.phones = phones;
     }
-    
-    public PersonDTO(Person person) {
+
+    public PersonDTO() {
+    }
+
+    public PersonDTO(Person person, Address address, List<Phone> phones, HobbiesDTO hobbies) {
         this.id = person.getId();
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.email = person.getEmail();
-//        this.street = street;
-//        this.cityName = cityName;
-//        this.zip = zip;
-//        this.hobbies = hobbies;
-//        this.phones = phones;
+        this.street = address.getStreet();
+        this.cityName = address.getCityInfo().getCity();
+        this.zip = address.getCityInfo().getZipCode();
+        this.phones = phones;
+        for (HobbyDTO hobby : hobbies.getHobbies()) {
+            this.hobbies.add(hobby.getName());
+        }
+
     }
 
     public Long getId() {
@@ -105,14 +114,12 @@ public class PersonDTO {
         this.hobbies = hobbies;
     }
 
-    public List<PhoneDTO> getPhones() {
+    public List<Phone> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<PhoneDTO> phones) {
+    public void setPhones(List<Phone> phones) {
         this.phones = phones;
     }
-    
-    
 
 }
