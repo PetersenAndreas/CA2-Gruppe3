@@ -1,5 +1,6 @@
 package dto;
 
+import entities.Person;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +11,9 @@ public class PersonsDTO {
     public PersonsDTO() {
     }
 
-    public PersonsDTO(List<PersonDTO> persons) {
-        for (PersonDTO person : persons) {
-            this.persons.add(person);
+    public PersonsDTO(List<Person> persons) {
+        for (Person person : persons) {
+            this.persons.add(new PersonDTO(person));
         }
     }
 

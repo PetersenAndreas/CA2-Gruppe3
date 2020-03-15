@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,18 +27,14 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String street;
-    
-   //Additional-info (add variables)!!
 
-   
+    //Additional-info (add variables)!!
     @ManyToOne
     private CityInfo cityInfo;
-    
-    
+
     @OneToMany(mappedBy = "address")
-    private List<Person> persons;
-    
-    
+    private List<Person> persons = new ArrayList();
+
     public Address() {
     }
 
@@ -50,9 +47,7 @@ public class Address implements Serializable {
     public Address(String street, CityInfo cityInfo) {
         this.street = street;
         this.cityInfo = cityInfo;
-        this.persons = persons;
     }
-    
 
     public Long getId() {
         return id;
@@ -86,7 +81,6 @@ public class Address implements Serializable {
         this.persons = persons;
     }
 
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -110,7 +104,7 @@ public class Address implements Serializable {
     @Override
     public String toString() {
         return "entities.Address[ id=" + id + " ]";
-        
+
     }
-    
+
 }

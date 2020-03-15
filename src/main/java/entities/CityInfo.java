@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,11 +29,8 @@ public class CityInfo implements Serializable {
     private String city;
 
     @OneToMany(mappedBy = "cityInfo")
-    private List<Address> addresses;
-    
-    
-    
-    
+    private List<Address> addresses = new ArrayList();
+
     public CityInfo() {
     }
 
@@ -42,10 +40,11 @@ public class CityInfo implements Serializable {
         this.addresses = addresses;
     }
 
-    
-    
-    
-    
+    public CityInfo(String zipCode, String city) {
+        this.zipCode = zipCode;
+        this.city = city;
+    }
+
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -69,8 +68,7 @@ public class CityInfo implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -103,5 +101,5 @@ public class CityInfo implements Serializable {
     public String toString() {
         return "entities.CityInfo[ id=" + id + " ]";
     }
-    
+
 }
