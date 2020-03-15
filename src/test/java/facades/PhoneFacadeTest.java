@@ -1,6 +1,6 @@
 package facades;
 
-import entities.Person;
+import entities.Phone;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,14 +13,14 @@ import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
-public class PersonFacadeTest {
+public class PhoneFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static PersonFacade facade;
-    private static Person person1, person2, person3, person4;
-    private static Person[] personArray;
+    private static PhoneFacade facade;
+    private static Phone phone1, phone2, phone3, phone4;
+    private static Phone[] phoneArray;
 
-    public PersonFacadeTest() {}
+    public PhoneFacadeTest() {}
 
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
@@ -29,13 +29,13 @@ public class PersonFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-        facade = PersonFacade.getPersonFacade(emf);
+        facade = PhoneFacade.getPhoneFacade(emf);
     }
 
     @BeforeAll
     public static void setUpClassV2() {
        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST,Strategy.DROP_AND_CREATE);
-       facade = PersonFacade.getPersonFacade(emf);
+       facade = PhoneFacade.getPhoneFacade(emf);
     }
 
     @AfterAll
@@ -48,27 +48,27 @@ public class PersonFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            person1 = new Person("Michael", "Korsgaard", "MichaelKorsgaard@gmail.com");
-            person2 = new Person("Andreas", "Petersen", "AndreasPetersen@gmail.com");
-            person3 = new Person("Cahit", "Bakirci", "CahitBakirci@gmail.com");
-            person4 = new Person("Marcus", "Johnsen", "MarcusJohnsen@gmail.com");
-            em.persist(person1);
-            em.persist(person2);
-            em.persist(person3);
-            em.persist(person4);
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
+            phone1 = new Phone("68170285", "Michaels telefonnummer");
+            phone2 = new Phone("32719822", "Andreas' telefonnummer");
+            phone3 = new Phone("11785381", "Cahits telefonnummer");
+            phone4 = new Phone("28774631", "Marcus' telefonnummer");
+            em.persist(phone1);
+            em.persist(phone2);
+            em.persist(phone3);
+            em.persist(phone4);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        personArray = new Person[]{person1, person2, person3, person4};
+        phoneArray = new Phone[]{phone1, phone2, phone3, phone4};
     }
     
     private static void emptyDatabase() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -81,9 +81,9 @@ public class PersonFacadeTest {
     }
 
     @Test
-    public void testPersonFacade() {
-        long result = facade.getPersonCount();
-        int expectedResult = personArray.length;
+    public void testPhoneFacade() {
+        long result = facade.getPhoneCount();
+        int expectedResult = phoneArray.length;
         assertEquals(expectedResult, result);
     }
 }

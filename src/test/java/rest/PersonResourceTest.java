@@ -17,13 +17,10 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
-//Uncomment the line below, to temporarily disable this test
-//@Disabled
 public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -41,7 +38,6 @@ public class PersonResourceTest {
 
     @BeforeAll
     public static void setUpClass() {
-        //This method must be called before you request the EntityManagerFactory
         EMF_Creator.startREST_TestWithDB();
         emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST, Strategy.CREATE);
         
@@ -54,14 +50,10 @@ public class PersonResourceTest {
     
     @AfterAll
     public static void closeTestServer(){
-        //System.in.read();
-         //Don't forget this, if you called its counterpart in @BeforeAll
          EMF_Creator.endREST_TestWithDB();
          httpServer.shutdownNow();
     }
     
-    // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
-    //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
@@ -84,7 +76,6 @@ public class PersonResourceTest {
         given().when().get("/person").then().statusCode(200);
     }
    
-    //This test assumes the database contains two rows
     @Test
     public void testDummyMsg() throws Exception {
         given()
@@ -96,7 +87,7 @@ public class PersonResourceTest {
     }
     
     @Test
-    public void testCount() throws Exception {
+    public void testPersonCount() throws Exception {
         given()
         .contentType("application/json")
         .get("/person/count").then()

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+        <h2>Documenting a REST API</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>URL</th>
+                    <th>Request Body (JSON)</th>
+                    <th>Response (JSON)</th>
+                    <th>Error (e)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/persons</td>
+                    <td></td>
+                    <td>[person, person, ...](1)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/persons/{id}  
+                        <br>
+                        Id: A person ID   
+                    </td>
+                    <td></td>
+                    <td>person (1)</td>
+                    <td>(e1)</td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/city/{zip}
+                        <br>
+                        Zip: zipcode for a city
+                    </td>
+                    <td></td>
+                    <td>[person, person, ...](1)</td>
+                    <td>(e1)</td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/hobbies/count/{hobby}
+                        <br>
+                        Hobby: name of a hobby</td>
+                    <td></td>
+                    <td>“Count” : n</td>
+                    <td>(e1)</td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/hobbies</td>
+                    <td></td>
+                    <td>[hobby, hobby, ...](2)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/zips</td>
+                    <td></td>
+                    <td>[city, city, ...](3)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td>/api/persons/phones/{id}
+                        <br>
+                        Id: A person ID </td>
+                    <td></td>
+                    <td>[phone, phone, ...](4)</td>
+                    <td>(e1)</td>
+                </tr>
+                <tr>
+                    <td>POST</td>
+                    <td>/api/add
+                    </td>
+                    <td>person (1) without id</td>
+                    <td>person (1) with id</td>
+                    <td>(e1), (e2)</td>
+                </tr>
+                <tr>
+                    <td>PUT</td>
+                    <td>/api/edit/{id}
+                        Id: A person ID </td>
+                    <td>person (1)</td>
+                    <td>person (1)</td>
+                    <td>(e1), (e2)</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h2>Errors</h2>
+        <p>(e) All errors are reported using this format (with the HTTP-status code matching the number)</p>
+        <p>{ status : statusCode, "msg": "Explains the problem" }</p>
+        <ul>
+            <li>(e1) :{ status : 404, "msg": "No content found for this request" }</li>
+            <li>(e2) :{ status : 400, "msg": "Field ‘xxx’ is required" } (for example, no name provided)</li>
+            <li>(e3) :{ status : 400, "msg": "Field ‘xxx’ value is invalid" } (for example, an empty name, or a name with only numbers)</li>
+        </ul>
+        <p>Request Body and Response Formats</p>
+        <div style="margin-left: 50px">
+            (1) User format (don’t provide ID, for POST<br>
+            <br>
+            {<br>
+            "id": Number,<br>
+            "firstName": String,<br>
+            "lastName": String,<br>
+            "email": String (email),<br>
+            "street": String,<br>
+            "cityName": String,<br>
+            "zip": String,<br>
+            "hobbies":[<br>
+            "hobbyTitle": String,<br>
+            ...<br>
+            ]<br>
+            "phones":[<br>
+            {<br>
+            "phoneNumber": String,<br>
+            "description": String<br>
+            },<br>
+            ...<br>
+            ]<br>
+            }<br>
+            <br>
+            <br>
+            <br>
+            (2) Hobby format (don’t provide ID, for POST<br>
+            <br>
+            {<br>
+            "id": Number,<br>
+            "hobbyTitle": String,<br>
+            "description": String<br>
+            }<br>
+            <br>
+            <br>
+            <br>
+            (3) City format (don’t provide ID, for POST<br>
+            <br>
+            {<br>
+            "cityName": String,<br>
+            "zipCode": String<br>
+            }<br>
+            <br>
+            <br>
+            <br>
+            (4) Phone format (don’t provide ID, for POST<br>
+            <br>
+            {<br>
+            "phoneNumber": String,<br>
+            "description": String<br>
+            }<br>
+        </div>
+        </div>
+        <p align="center" style="font-size: 30px"><a href="index.html" style="color: blue">Back to index</a></p>
+    </body>
+</html>
