@@ -9,10 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
-/**
- *
- * @author cahit
- */
 public class CityInfoFacade {
 
     private static CityInfoFacade instance;

@@ -5,33 +5,38 @@ import entities.CityInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author cahit
- */
 public class CityInfoDTO {
 
     private String zipCode;
-    private String city;
-    private List<String> addresses = new ArrayList();
+    private String cityName;
+//    private List<String> addresses = new ArrayList();
 
     public CityInfoDTO() {
     }
 
-    public CityInfoDTO(String zipCode, String city, List<Address> addresses) {
+//    public CityInfoDTO(String zipCode, String city, List<Address> addresses) {
+//        this.zipCode = zipCode;
+//        this.cityName = city;
+//        for (Address addresse : addresses) {
+//            this.addresses.add(addresse.getStreet());
+//        }
+//    }
+//    
+//    public CityInfoDTO(CityInfo city) {
+//        this.zipCode = city.getZipCode();
+//        this.cityName = city.getCity();
+//        for (Address addresse : city.getAddresses()) {
+//            this.addresses.add(addresse.getStreet());
+//        }
+//    }
+    public CityInfoDTO(String zipCode, String city) {
         this.zipCode = zipCode;
-        this.city = city;
-        for (Address addresse : addresses) {
-            this.addresses.add(addresse.getStreet());
-        }
+        this.cityName = city;
     }
 
     public CityInfoDTO(CityInfo city) {
         this.zipCode = city.getZipCode();
-        this.city = city.getCity();
-        for (Address addresse : city.getAddresses()) {
-            this.addresses.add(addresse.getStreet());
-        }
+        this.cityName = city.getCity();
     }
 
     public String getZipCode() {
@@ -42,20 +47,19 @@ public class CityInfoDTO {
         this.zipCode = zipCode;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
-    public List<String> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<String> addresses) {
-        this.addresses = addresses;
-    }
-
+//    public List<String> getAddresses() {
+//        return addresses;
+//    }
+//
+//    public void setAddresses(List<String> addresses) {
+//        this.addresses = addresses;
+//    }
 }
