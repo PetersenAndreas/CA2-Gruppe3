@@ -17,7 +17,7 @@ public class CityInfoFacade {
     private CityInfoFacade() {
     }
 
-    public static CityInfoFacade getHobbyFacade(EntityManagerFactory _emf) {
+    public static CityInfoFacade getCityInfoFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
             instance = new CityInfoFacade();
