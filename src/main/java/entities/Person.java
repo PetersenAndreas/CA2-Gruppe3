@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -22,10 +23,13 @@ public class Person implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    
+
+    @ManyToOne
+    private Address address;
+
     @ManyToMany
     private List<Hobby> hobbies = new ArrayList();
-    
+
     @OneToMany(mappedBy = "person")
     private List<Phone> phones = new ArrayList();
 
@@ -34,9 +38,51 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.email = email;
     }
+
+    public Person(String firstName, String lastName, String email, Address address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+    }
     
-    public Person() {}
-    
+    public Person(String firstName, String lastName, String email, Address address,
+    List<Hobby> hobbies, List<Phone> phones) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.hobbies = hobbies;
+        this.phones = phones;
+    }
+
+    public Person() {
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public List<Hobby> getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(List<Hobby> hobbies) {
+        this.hobbies = hobbies;
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
+    }
+
     public Long getId() {
         return id;
     }
@@ -49,10 +95,10 @@ public class Person implements Serializable {
         return firstName;
     }
 
-    public void setFirstName(String fullName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    
+
     public String getLastName() {
         return lastName;
     }

@@ -4,36 +4,28 @@ import entities.Phone;
 
 public class PhoneDTO {
     
-    private Long id;
-    private String phoneNumber;
+    private String number;
     private String description;
 
-    public PhoneDTO(Long id, String phoneNumber, String description) {
-        this.id = id;
-        this.phoneNumber = phoneNumber;
-        this.description = description;
+    public PhoneDTO() {
     }
 
+    public PhoneDTO(String number, String description) {
+        this.number = number;
+        this.description = description;
+    }
+    
     public PhoneDTO(Phone phone) {
-        this.id = phone.getId();
-        this.phoneNumber = phone.getNumber();
+        this.number = phone.getNumber();
         this.description = phone.getDescription();
     }
 
-    public Long getId() {
-        return id;
+    public String getNumber() {
+        return number;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getDescription() {
