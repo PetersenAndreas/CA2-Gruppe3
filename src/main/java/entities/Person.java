@@ -58,6 +58,11 @@ public class Person implements Serializable {
 
     public Person() {
     }
+    
+    public void addHobbies(Hobby hobby) {
+        hobbies.add(hobby);
+        hobby.addPersons(this);
+    }
 
     public Address getAddress() {
         return address;

@@ -1,6 +1,8 @@
 package facades;
 
+import dto.HobbyDTO;
 import dto.PersonDTO;
+import entities.Hobby;
 import entities.Person;
 import java.util.List;
 import utils.EMF_Creator;
@@ -19,7 +21,8 @@ import utils.EMF_Creator.Strategy;
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static PersonFacade facade;
+    private static PersonFacade personFacade;
+    private static HobbyFacade hobbyFacade;
     private static Person person1, person2, person3, person4;
     private static Person[] personArray;
 
@@ -32,13 +35,13 @@ public class PersonFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-        facade = PersonFacade.getPersonFacade(emf);
+        personFacade = PersonFacade.getPersonFacade(emf);
     }
 
     @BeforeAll
     public static void setUpClassV2() {
        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST,Strategy.DROP_AND_CREATE);
-       facade = PersonFacade.getPersonFacade(emf);
+       personFacade = PersonFacade.getPersonFacade(emf);
     }
 
     @AfterAll
@@ -85,7 +88,7 @@ public class PersonFacadeTest {
 
     @Test
     public void testPersonFacade() {
-        long result = facade.getPersonCount();
+        long result = personFacade.getPersonCount();
         int expectedResult = personArray.length;
         assertEquals(expectedResult, result);
     }
@@ -93,7 +96,7 @@ public class PersonFacadeTest {
     @Test
     public void testAddPerson() {
         Person testPerson = new Person("Muhammad", "Ali", "Champ@gmail.com");
-        PersonDTO result = facade.addPerson(testPerson);
+        PersonDTO result = personFacade.addPerson(testPerson);
         assertEquals(testPerson.getId(), result.getId());
         assertTrue(testPerson.getFirstName().equals(result.getFirstName()));
     }
