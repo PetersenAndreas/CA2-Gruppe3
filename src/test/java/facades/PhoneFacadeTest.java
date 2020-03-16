@@ -28,7 +28,7 @@ public class PhoneFacadeTest {
                 "jdbc:mysql://localhost:3307/startcode_test",
                 "dev",
                 "ax2",
-                EMF_Creator.Strategy.CREATE);
+                EMF_Creator.Strategy.DROP_AND_CREATE);
         facade = PhoneFacade.getPhoneFacade(emf);
     }
 
