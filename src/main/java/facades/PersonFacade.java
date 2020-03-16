@@ -39,7 +39,7 @@ public class PersonFacade {
     }
     
     // "Get all persons with a given hobby"
-    public PersonDTO getPersonByHobby(Hobby hobby) {
+    public PersonDTO getPersonsByHobby(Hobby hobby) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.hobbies = :hobbies", Person.class);
@@ -53,7 +53,7 @@ public class PersonFacade {
     }
     
     // "Get all persons living in a given city (i.e. 2800 Lyngby)"
-    public PersonDTO getPersonByHobby(Address address) {
+    public PersonDTO getPersonsByCity(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.address = :address", Person.class);
