@@ -4,6 +4,7 @@ package facades;
 
 import dto.CitiesInfoDTO;
 import dto.CityInfoDTO;
+import entities.Address;
 import entities.CityInfo;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,6 +21,7 @@ public class CityInfoFacadeTest {
     private static EntityManagerFactory emf;
     private static CityInfoFacade facade;
     private static CityInfo city1, city2, city3, city4;
+    private static Address address1, address2, address3, address4;
     private static CityInfo[] cityArray;
 
     public CityInfoFacadeTest() {
@@ -56,6 +58,10 @@ public class CityInfoFacadeTest {
             city2 = new CityInfo("2800", "Lyngby");
             city3 = new CityInfo("2840", "Holte");
             city4 = new CityInfo("2730", "Herlev");
+            address1 = new Address("Hidden Street", city2);
+            address2 = new Address("Secret Street", city3);
+            address3 = new Address("Stealth Street", city4);
+            address4 = new Address("Gone Street", city4);
             em.persist(city1);
             em.persist(city2);
             em.persist(city3);
@@ -71,6 +77,7 @@ public class CityInfoFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
             em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
             em.getTransaction().commit();
         } finally {
