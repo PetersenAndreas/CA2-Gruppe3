@@ -30,6 +30,11 @@ public class Hobby implements Serializable {
     
     public Hobby() {}
     
+    public void addPersons(Person person) {
+        persons.add(person);
+        person.addHobbies(this);
+    }
+    
     public Long getId() {
         return id;
     }

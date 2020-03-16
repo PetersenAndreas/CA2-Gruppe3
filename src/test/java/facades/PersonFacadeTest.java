@@ -1,6 +1,8 @@
 package facades;
 
+import dto.HobbyDTO;
 import dto.PersonDTO;
+import entities.Hobby;
 import entities.Person;
 import java.util.List;
 import utils.EMF_Creator;
@@ -32,7 +34,7 @@ public class PersonFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.DROP_AND_CREATE);
-        facade = PersonFacade.getPersonFacade(emf);
+                facade = PersonFacade.getPersonFacade(emf);
     }
 
     @BeforeAll
