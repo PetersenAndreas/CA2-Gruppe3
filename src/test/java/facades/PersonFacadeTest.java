@@ -1,12 +1,15 @@
 package facades;
 
+import dto.PersonDTO;
 import entities.Person;
+import java.util.List;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,5 +88,13 @@ public class PersonFacadeTest {
         long result = facade.getPersonCount();
         int expectedResult = personArray.length;
         assertEquals(expectedResult, result);
+    }
+    
+    @Test
+    public void testAddPerson() {
+        Person testPerson = new Person("Muhammad", "Ali", "Champ@gmail.com");
+        PersonDTO result = facade.addPerson(testPerson);
+        assertEquals(testPerson.getId(), result.getId());
+        assertTrue(testPerson.getFirstName().equals(result.getFirstName()));
     }
 }
