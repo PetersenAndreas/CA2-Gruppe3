@@ -1,21 +1,22 @@
 package facades;
 
-import dto.PhoneDTO;
-import entities.Phone;
+import dto.AddressDTO;
+import entities.Address;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-public class PhoneFacade {
+public class AddressFacade {
 
-    private static PhoneFacade instance;
+    private static AddressFacade instance;
     private static EntityManagerFactory emf;
-    
-    private PhoneFacade() {}
-    
-    public static PhoneFacade getPhoneFacade(EntityManagerFactory _emf) {
+
+    private AddressFacade() {
+    }
+
+    public static AddressFacade getAddressFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new PhoneFacade();
+            instance = new AddressFacade();
         }
         return instance;
     }
@@ -24,26 +25,26 @@ public class PhoneFacade {
         return emf.createEntityManager();
     }
     
-    // Create a Phone
-    public PhoneDTO addPhone(Phone phone) {
+    // Create an address
+    public AddressDTO addAddress(Address address) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(phone);
+            em.persist(address);
             em.getTransaction().commit();
-            PhoneDTO result = new PhoneDTO(phone);
+            AddressDTO result = new AddressDTO(address);
             return result;
         } finally {
             em.close();
         }
     }
-    
-    public long getPhoneCount(){
+
+    public long getAddressCount() {
         EntityManager em = getEntityManager();
-        try{
-            long phoneCount = (long)em.createQuery("SELECT COUNT(p) FROM Phone p").getSingleResult();
-            return phoneCount;
-        }finally{  
+        try {
+            long addressCount = (long) em.createQuery("SELECT COUNT(a) FROM Address a").getSingleResult();
+            return addressCount;
+        } finally {
             em.close();
         }
     }

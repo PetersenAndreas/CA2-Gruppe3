@@ -75,19 +75,30 @@ public class PersonFacade {
     }
 
     // Get the count of people with a given hobby
-    public PersonDTO getPersonCountByHobby(Hobby hobby) {
+    public long getPersonCountByHobby(String hobby) {
+        EntityManager em = emf.createEntityManager();
+        try{
+            long personCount = (long) em.createQuery("SELECT COUNT(p) FROM Person p Join p.hobbies h WHERE h.name = :hobbies").setParameter("hobbies", hobby).getSingleResult();
+            return personCount;
+        }finally{  
+            em.close();
+        }
+    }
+    
+    // "Get all persons with a given hobby"
+    public PersonsDTO getPersonsByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Person> tq = em.createQuery("SELECT COUNT(p) FROM Person p WHERE p.hobbies = :hobbies", Person.class);
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.hobbies h WHERE h.name = :hobbies", Person.class);
             tq.setParameter("hobbies", hobby);
-            Person person = tq.getSingleResult();
-            PersonDTO result = new PersonDTO(person);
+            List<Person> resultList = tq.getResultList();
+            PersonsDTO result = new PersonsDTO(resultList);
             return result;
         } finally {
             em.close();
         }
     }
-
+    
     // Get information about a person (address, hobbies etc) given a phone number
     public PersonDTO getPersonInformationByPhone(Phone phone) {
         EntityManager em = emf.createEntityManager();
