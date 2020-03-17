@@ -21,26 +21,26 @@ import org.junit.jupiter.api.Disabled;
 public class PersonsResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
-                "pu",
-                "jdbc:mysql://localhost:3307/startcode",
-                "dev",
-                "ax2",
-                EMF_Creator.Strategy.CREATE);
-    
-    private static final PersonFacade FACADE =  PersonFacade.getPersonFacade(EMF);
+            "pu",
+            "jdbc:mysql://localhost:3307/startcode",
+            "dev",
+            "ax2",
+            EMF_Creator.Strategy.CREATE);
+
+    private static final PersonFacade FACADE = PersonFacade.getPersonFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-            
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
         return "{\"msg\":\"Hello World\"}";
     }
-    
+
     @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPersonCount() {
         long count = FACADE.getPersonCount();
-        return "{\"count\":"+count+"}";
+        return "{\"count\":" + count + "}";
     }
 }
