@@ -2,6 +2,7 @@ package facades;
 
 import dto.PersonDTO;
 import dto.PersonsDTO;
+import dto.PhoneDTO;
 import entities.Address;
 import entities.Hobby;
 import javax.persistence.EntityManager;
@@ -106,7 +107,7 @@ public class PersonFacade {
         EntityManager em = emf.createEntityManager();
         try {
             Person newPerson = new Person(person.getFirstName(), person.getLastName(), person.getEmail());
-            
+
             em.getTransaction().begin();
             em.persist(newPerson);
             em.getTransaction().commit();
@@ -152,16 +153,72 @@ public class PersonFacade {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            List<Hobby> allHobbies = em.createQuery("SELECT h From Hobby h", Hobby.class).getResultList();
-            List<Address> allAddresses = em.createQuery("SELECT a From Address a", Address.class).getResultList();
             TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.id = :id", Person.class).setParameter("id", id);
             Person person = tq.getSingleResult();
+
+            // Update firstName, lastName and Email
             person.setFirstName(p.getFirstName());
             person.setLastName(p.getLastName());
             person.setEmail(p.getEmail());
+
+            // Update Address
+            if(!Objects.isNull(person.getAddress())){
+                person.getAddress().getPersons().remove(person);
+            }
+            Address address = em.createQuery("SELECT a From Address a WHERE a.street = :street", Address.class)
+                    .setParameter("street", p.getStreet())
+                    .getSingleResult();
+            person.addAddressToPerson(address);
+
+            // Update Hobbies
+            List<Hobby> allHobbies = em.createQuery("SELECT h From Hobby h", Hobby.class).getResultList();
+            for (Hobby hobby : person.getHobbies()) {
+                hobby.getPersons().remove(person);
+            }
+            person.getHobbies().clear();
+            for (String hobby : p.getHobbies()) {
+                Hobby newHobby = null;
+                for (Hobby dbHobby : allHobbies) {
+                    if (dbHobby.getName().toLowerCase().equals(hobby.toLowerCase())) {
+                        newHobby = dbHobby;
+                        break;
+                    }
+                }
+                person.addHobbyToPerson(newHobby);
+            }
+
+            // Update Phones
+            // Remove phones no longer connected
+            for (Phone phone : person.getPhones()) {
+                boolean matchFound = false;
+                for (PhoneDTO newPhone : p.getPhones().getPhones()) {
+                    if (Objects.equals(phone.getNumber(), newPhone.getNumber())) {
+                        matchFound = true;
+                        phone.setDescription(newPhone.getDescription());
+                        break;
+                    }
+                }
+                if (!matchFound) {
+                    person.getPhones().remove(phone);
+                    em.remove(phone);
+                }
+            }
+
+            // Add new phones
+            for (PhoneDTO newPhone : p.getPhones().getPhones()) {
+                boolean matchFound = false;
+                for (Phone phone : person.getPhones()) {
+                    if (Objects.equals(phone.getNumber(), newPhone.getNumber())) {
+                        matchFound = true;
+                        break;
+                    }
+                }
+                if (!matchFound) {
+                    Phone phone = new Phone(newPhone.getNumber(), newPhone.getDescription(), person);
+                    em.persist(phone);
+                }
+            }
             em.getTransaction().commit();
-        } catch (NoResultException e) {
-            throw new InvalidInputException("");
         } finally {
             em.close();
         }
@@ -176,6 +233,16 @@ public class PersonFacade {
         //Variable lastName must NOT be null
         if (Objects.isNull(newPerson.getLastName())) {
             throw new InvalidInputException("Field '" + "lastName" + "' is required");
+        }
+
+        //Variable street must NOT be null
+        if (Objects.isNull(newPerson.getStreet())) {
+            throw new InvalidInputException("Field '" + "street" + "' is required");
+        }
+        
+        //Variable phones must NOT be null
+        if (Objects.isNull(newPerson.getPhones())) {
+            throw new InvalidInputException("Field '" + "phones" + "' is required");
         }
 
         EntityManager em = emf.createEntityManager();

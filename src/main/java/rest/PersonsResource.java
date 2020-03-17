@@ -63,10 +63,12 @@ public class PersonsResource {
     }
 
     @Path("/edit/{id}")
-    @GET
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public String editPerson(String person, @PathParam("id") long id) throws InvalidInputException {
         PersonDTO newPerson = GSON.fromJson(person, PersonDTO.class);
+        FACADE.editPerson(newPerson, id);
         return GSON.toJson(newPerson);
     }
 
