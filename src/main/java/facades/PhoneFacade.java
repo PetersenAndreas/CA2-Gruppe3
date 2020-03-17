@@ -1,5 +1,7 @@
 package facades;
 
+import dto.PhoneDTO;
+import entities.Phone;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -20,6 +22,20 @@ public class PhoneFacade {
 
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+    
+    // Create a Phone
+    public PhoneDTO addPhone(Phone phone) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(phone);
+            em.getTransaction().commit();
+            PhoneDTO result = new PhoneDTO(phone);
+            return result;
+        } finally {
+            em.close();
+        }
     }
     
     public long getPhoneCount(){

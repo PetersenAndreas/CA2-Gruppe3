@@ -1,12 +1,14 @@
 package facades;
 
 import dto.PersonDTO;
+import dto.PersonsDTO;
 import entities.Address;
 import entities.Hobby;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import entities.Person;
 import entities.Phone;
+import java.util.List;
 import javax.persistence.TypedQuery;
 
 public class PersonFacade {
@@ -38,20 +40,6 @@ public class PersonFacade {
         }
     }
     
-    // "Get all persons with a given hobby"
-    public PersonDTO getPersonsByHobby(Hobby hobby) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.hobbies = :hobbies", Person.class);
-            tq.setParameter("hobbies", hobby);
-            Person person = tq.getSingleResult();
-            PersonDTO result = new PersonDTO(person);
-            return result;
-        } finally {
-            em.close();
-        }
-    }
-    
     // "Get all persons living in a given city (i.e. 2800 Lyngby)"
     public PersonDTO getPersonsByCity(Address address) {
         EntityManager em = emf.createEntityManager();
@@ -67,17 +55,28 @@ public class PersonFacade {
     }
     
     // Get the count of people with a given hobby
-    public int getPersonCountByHobby(Hobby hobby) {
+    public long getPersonCountByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
         try{
-            TypedQuery<Person> tq = em.createQuery("SELECT COUNT(p) FROM Person p WHERE p.hobbies = :hobbies", Person.class);
-            tq.setParameter("hobbies", hobby);
-            Person person = tq.getSingleResult();
-            PersonDTO result = new PersonDTO(person);
-            return result;
+            long personCount = (long) em.createQuery("SELECT COUNT(p) FROM Person p Join p.hobbies h WHERE h.name = :hobbies").setParameter("hobbies", hobby).getSingleResult();
+            return personCount;
         }finally{  
             em.close();
         }    
+    }
+    
+    // "Get all persons with a given hobby"
+    public PersonsDTO getPersonsByHobby(String hobby) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.hobbies h WHERE h.name = :hobbies", Person.class);
+            tq.setParameter("hobbies", hobby);
+            List<Person> resultList = tq.getResultList();
+            PersonsDTO result = new PersonsDTO(resultList);
+            return result;
+        } finally {
+            em.close();
+        }
     }
     
     // Get information about a person (address, hobbies etc) given a phone number
