@@ -29,6 +29,20 @@ public class CityInfoFacade {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    // Create a city
+    public CityInfoDTO addCityInfo(CityInfo city) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(city);
+            em.getTransaction().commit();
+            CityInfoDTO result = new CityInfoDTO(city);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
 
     public long getCityCount() {
         EntityManager em = getEntityManager();

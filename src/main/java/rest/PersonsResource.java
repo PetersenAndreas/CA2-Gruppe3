@@ -2,7 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.PersonDTO;
+import dto.PersonsDTO;
 import entities.Person;
+import exceptions.InvalidInputException;
+import exceptions.NoResultFoundException;
 import utils.EMF_Creator;
 import facades.PersonFacade;
 import javax.persistence.EntityManagerFactory;
@@ -30,12 +34,11 @@ public class PersonsResource {
     private static final PersonFacade FACADE = PersonFacade.getPersonFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello World\"}";
-    }
-
+//    @GET
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String demo() {
+//        return "{\"msg\":\"Hello World\"}";
+//    }
     @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -43,4 +46,41 @@ public class PersonsResource {
         long count = FACADE.getPersonCount();
         return "{\"count\":" + count + "}";
     }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllPersons() {
+        PersonsDTO all = FACADE.getAllPersons();
+        return GSON.toJson(all);
+    }
+
+    @Path("/{id}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getPersonByID(@PathParam("id") long id) throws NoResultFoundException {
+        PersonDTO person = FACADE.getPersonById(id);
+        return GSON.toJson(person);
+    }
+
+    @Path("/edit/{id}")
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String editPerson(String person, @PathParam("id") long id) throws InvalidInputException {
+        PersonDTO newPerson = GSON.fromJson(person, PersonDTO.class);
+        FACADE.editPerson(newPerson, id);
+        return GSON.toJson(newPerson);
+    }
+
+    @Path("/add")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String addPerson(String person) {
+        PersonDTO personAdd = GSON.fromJson(person, PersonDTO.class);
+        personAdd = FACADE.addPerson(personAdd);
+        return GSON.toJson(personAdd);
+
+    }
+
 }

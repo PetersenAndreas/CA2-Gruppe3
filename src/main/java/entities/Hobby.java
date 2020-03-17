@@ -30,8 +30,13 @@ public class Hobby implements Serializable {
         this.description = description;
     }
     
-    public Hobby() {
+    public Hobby(String name, String description, List<Person> persons) {
+        this.name = name;
+        this.description = description;
+        this.persons = persons;
     }
+    
+    public Hobby() {}
     
     public void addPersonToHobby(Person person){
         if(!this.persons.contains(person)){
@@ -73,5 +78,4 @@ public class Hobby implements Serializable {
     public void setPersons(List<Person> persons) {
         this.persons = persons;
     }
-
 }

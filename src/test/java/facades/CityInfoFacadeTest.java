@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
 public class CityInfoFacadeTest {
-    
+
     private static EntityManagerFactory emf;
     private static CityInfoFacade facade;
     private static PersonFacade facade2;
@@ -33,10 +33,10 @@ public class CityInfoFacadeTest {
     private static Person person1, person2, person3, person4, person5, person6;
     private static List<Person> personList = new ArrayList();
     private static CityInfo[] cityArray;
-    
+
     public CityInfoFacadeTest() {
     }
-    
+
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
                 "pu",
@@ -47,19 +47,19 @@ public class CityInfoFacadeTest {
         facade = CityInfoFacade.getCityInfoFacade(emf);
         facade2 = PersonFacade.getPersonFacade(emf);
     }
-    
+
     @BeforeAll
     public static void setUpClassV2() {
         emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
         facade = CityInfoFacade.getCityInfoFacade(emf);
         facade2 = PersonFacade.getPersonFacade(emf);
     }
-    
+
     @AfterAll
     public static void tearDownClass() {
         emptyDatabase();
     }
-    
+
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
@@ -80,7 +80,7 @@ public class CityInfoFacadeTest {
             person4 = new Person("Svend", "Svendsen", "Svend@Svendsen.dk", address3);
             person5 = new Person("Kalle", "Kallesen", "Kalle@Kallesen.dk", address3);
             person6 = new Person("Jon", "Joensen", "Jon@Joensen.dk", address3);
-            
+
             em.persist(city1);
             em.persist(city2);
             em.persist(city3);
@@ -91,9 +91,9 @@ public class CityInfoFacadeTest {
             em.persist(person4);
             em.persist(person5);
             em.persist(person6);
-            
+
             em.getTransaction().commit();
-            
+
         } finally {
             em.close();
         }
@@ -105,7 +105,7 @@ public class CityInfoFacadeTest {
         personList.add(person5);
         personList.add(person6);
     }
-    
+
     private static void emptyDatabase() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -118,26 +118,26 @@ public class CityInfoFacadeTest {
             em.close();
         }
     }
-    
+
     @AfterEach
     public void tearDown() {
         emptyDatabase();
     }
-    
+
     @Test
     public void testCityInfoFacade() {
         long result = facade.getCityCount();
         int expectedResult = cityArray.length;
         assertEquals(expectedResult, result);
     }
-    
+
     @Test
     public void testGetAllCities() {
         CitiesInfoDTO result = facade.getAllCityInfoes();
-        
+
         int expectedResultSize = cityArray.length;
         assertEquals(expectedResultSize, result.getCitiesInfo().size());
-        
+
         for (CityInfoDTO cityInfoDTO : result.getCitiesInfo()) {
             String zip = cityInfoDTO.getZipCode();
             String name = cityInfoDTO.getCityName();
@@ -153,39 +153,39 @@ public class CityInfoFacadeTest {
             assertTrue(matchFound);
         }
     }
-    
+
     @Test
     public void testGetPersonsFromCityWhereThereIsOnlyOneMatch() {
-        
+
         Person expectedPerson = person2;
         CityInfo expectedCity = expectedPerson.getAddress().getCityInfo();
         Long searchCityID = expectedCity.getId();
-        
+
         PersonsDTO result = facade.getPersonsFromCity(searchCityID);
-        
+
         int expectedResultSize = 1;
         assertEquals(expectedResultSize, result.getPersons().size());
-        
+
         PersonDTO resultPerson = result.getPersons().get(expectedResultSize - 1);
         assertEquals(expectedPerson.getId(), resultPerson.getId());
-        
+
     }
-    
+
     @Test
     public void testGetPersonsFromCityWithMultipleMatches() {
-        
+
         CityInfo commonExpectedCity = person5.getAddress().getCityInfo();
         List<Person> expectedResult = new ArrayList(Arrays.asList(new Person[]{person4, person5, person6}));
         Long searchCityId = commonExpectedCity.getId();
         PersonsDTO result = facade.getPersonsFromCity(searchCityId);
-        
+
         int expectedResultSize = expectedResult.size();
         assertEquals(expectedResultSize, result.getPersons().size());
-        
+
         for (Person person : expectedResult) {
-            
+
             boolean foundMatch = false;
-            
+
             for (PersonDTO personDTO : result.getPersons()) {
                 if (Objects.equals(person.getId(), personDTO.getId())) {
                     foundMatch = true;
@@ -197,7 +197,7 @@ public class CityInfoFacadeTest {
             }
             assertTrue(foundMatch);
         }
-        
+
     }
-    
+
 }
