@@ -1,6 +1,7 @@
 package facades;
 
 import dto.CitiesInfoDTO;
+import dto.CityInfoDTO;
 import dto.PersonsDTO;
 import entities.CityInfo;
 import entities.Person;
@@ -39,7 +40,7 @@ public class CityInfoFacade {
         }
     }
 
-    public CitiesInfoDTO getAllCitiInfoes() {
+    public CitiesInfoDTO getAllCityInfoes() {
 
         EntityManager em = emf.createEntityManager();
 
@@ -51,6 +52,38 @@ public class CityInfoFacade {
         } finally {
             em.close();
         }
+    }
+
+    public CityInfoDTO getCitiesInfoByZipCode(CityInfo zip) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<CityInfo> tq = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode = :zipCode", CityInfo.class);
+            tq.setParameter("zipCode", zip);
+            CityInfo info = tq.getSingleResult();
+            CityInfoDTO result = new CityInfoDTO(info);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+
+    public PersonsDTO getPersonsFromCity(Long id) {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.id = :id",
+                     Person.class);
+            tq.setParameter("id", id);
+            List<Person> persons = tq.getResultList();
+            PersonsDTO result = new PersonsDTO(persons);
+            return result;
+
+        } finally {
+            em.close();
+        }
+
     }
 
 }

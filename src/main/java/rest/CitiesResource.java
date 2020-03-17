@@ -7,6 +7,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.CitiesInfoDTO;
+import facades.CityInfoFacade;
 import facades.PersonFacade;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
@@ -35,11 +37,19 @@ public class CitiesResource {
             EMF_Creator.Strategy.CREATE);
 
     private static final PersonFacade FACADE = PersonFacade.getPersonFacade(EMF);
+    private static final CityInfoFacade FACADE_CITY = CityInfoFacade.getCityInfoFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello World\"}";
+    public String getAllCities() {
+        CitiesInfoDTO cities = FACADE_CITY.getAllCityInfoes();
+        return GSON.toJson(cities);
     }
+
+    
+    
+    
 }

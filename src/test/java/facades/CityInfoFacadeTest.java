@@ -99,7 +99,7 @@ public class CityInfoFacadeTest {
     
     @Test
     public void testGetAllCities(){
-        CitiesInfoDTO result = facade.getAllCitiInfoes();
+        CitiesInfoDTO result = facade.getAllCityInfoes();
         
         int expectedResultSize = cityArray.length;
         assertEquals(expectedResultSize, result.getCitiesInfo().size());
