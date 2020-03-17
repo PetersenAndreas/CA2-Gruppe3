@@ -99,13 +99,15 @@ public class PersonFacade {
     }
     
     // Create a Person (with hobbies, phone, address etc.)
-    public PersonDTO addPerson(Person person) {
+    public PersonDTO addPerson(PersonDTO person) {
         EntityManager em = emf.createEntityManager();
         try {
+            Person newPerson = new Person(person.getFirstName(), person.getLastName(), person.getEmail());
+            
             em.getTransaction().begin();
-            em.persist(person);
+            em.persist(newPerson);
             em.getTransaction().commit();
-            PersonDTO result = new PersonDTO(person);
+            PersonDTO result = new PersonDTO(newPerson);
             return result;
         } finally {
             em.close();

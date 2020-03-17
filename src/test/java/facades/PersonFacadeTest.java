@@ -24,6 +24,7 @@ public class PersonFacadeTest {
     private static PersonFacade facade;
     private static Person person1, person2, person3, person4;
     private static Person[] personArray;
+    private static Long highestId;
 
     public PersonFacadeTest() {}
 
@@ -67,6 +68,14 @@ public class PersonFacadeTest {
             em.close();
         }
         personArray = new Person[]{person1, person2, person3, person4};
+        
+        highestId = 0L;
+        for(Person person : personArray) {
+            if(person.getId() > highestId) {
+                highestId = person.getId();
+            }
+        }
+        
     }
     
     private static void emptyDatabase() {
@@ -95,8 +104,10 @@ public class PersonFacadeTest {
     @Test
     public void testAddPerson() {
         Person testPerson = new Person("Muhammad", "Ali", "Champ@gmail.com");
-        PersonDTO result = facade.addPerson(testPerson);
-        assertEquals(testPerson.getId(), result.getId());
+        Long expectedId = highestId + 1;
+        PersonDTO testPersonDTO = new PersonDTO(testPerson);
+        PersonDTO result = facade.addPerson(testPersonDTO);
+        assertEquals(expectedId, result.getId());
         assertTrue(testPerson.getFirstName().equals(result.getFirstName()));
     }
 }
