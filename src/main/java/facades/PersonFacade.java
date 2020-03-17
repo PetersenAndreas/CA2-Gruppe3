@@ -67,7 +67,7 @@ public class PersonFacade {
     }
     
     // Get the count of people with a given hobby
-    public PersonDTO getPersonCountByHobby(Hobby hobby) {
+    public int getPersonCountByHobby(Hobby hobby) {
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery<Person> tq = em.createQuery("SELECT COUNT(p) FROM Person p WHERE p.hobbies = :hobbies", Person.class);
