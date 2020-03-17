@@ -74,7 +74,7 @@ public class CityInfoFacade {
         try {
 
             TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.id = :id",
-                     Person.class);
+                    Person.class);
             tq.setParameter("id", id);
             List<Person> persons = tq.getResultList();
             PersonsDTO result = new PersonsDTO(persons);

@@ -22,4 +22,6 @@ public class CitiesInfoDTO {
         this.citiesInfo = citiesInfo;
     }
 
+    
+    
 }
