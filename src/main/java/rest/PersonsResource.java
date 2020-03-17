@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Person;
+import exceptions.InvalidInputException;
 import exceptions.NoResultFoundException;
 import utils.EMF_Creator;
 import facades.PersonFacade;
@@ -60,6 +61,14 @@ public class PersonsResource {
     public String getPersonByID(@PathParam("id") long id) throws NoResultFoundException {
         PersonDTO person = FACADE.getPersonById(id);
         return GSON.toJson(person);
+    }
+    
+    @Path("/edit/{id}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String editPerson(String person, @PathParam("id") long id) throws InvalidInputException {
+        PersonDTO newPerson = GSON.fromJson(person, PersonDTO.class);
+        return GSON.toJson(newPerson);
     }
     
 }
