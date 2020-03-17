@@ -25,14 +25,17 @@ public class Person implements Serializable {
     private String lastName;
     private String email;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hobby> hobbies = new ArrayList();
 
     @OneToMany(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Phone> phones = new ArrayList();
+
+    public Person() {
+    }
 
     public Person(String firstName, String lastName, String email) {
         this.firstName = firstName;
@@ -45,24 +48,49 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+        addAddressToPerson(address);
     }
-    
+
     public Person(String firstName, String lastName, String email, Address address,
-    List<Hobby> hobbies, List<Phone> phones) {
+            List<Hobby> hobbies, List<Phone> phones) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+        addAddressToPerson(address);
         this.hobbies = hobbies;
+        for (Hobby hobby : hobbies) {
+            addHobbyToPerson(hobby);
+        }
         this.phones = phones;
+        for (Phone phone : phones) {
+            addPhoneToPerson(phone);
+        }
     }
 
-    public Person() {
+    public void addAddressToPerson(Address address) {
+        this.address = address;
+        if (!address.getPersons().contains(this)) {
+            address.getPersons().add(this);
+        }
     }
-    
-    public void addHobbies(Hobby hobby) {
-        hobbies.add(hobby);
-        hobby.addPersons(this);
+
+    public void addHobbyToPerson(Hobby hobby) {
+        if (!this.hobbies.contains(hobby)) {
+            this.hobbies.add(hobby);
+        }
+        if (!hobby.getPersons().contains(this)) {
+            hobby.getPersons().add(this);
+        }
+    }
+
+    public void addPhoneToPerson(Phone phone) {
+        if (!this.phones.contains(phone)) {
+            this.phones.add(phone);
+        }
+        if (!phone.getPerson().equals(this)) {
+            phone.setPerson(this);
+        }
     }
 
     public Address getAddress() {

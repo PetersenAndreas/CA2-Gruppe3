@@ -32,11 +32,23 @@ public class CityInfo implements Serializable {
         this.zipCode = zipCode;
         this.city = city;
         this.addresses = addresses;
+        for (Address address : addresses) {
+            addAddressToCityInfo(address);
+        }
     }
 
     public CityInfo(String zipCode, String city) {
         this.zipCode = zipCode;
         this.city = city;
+    }
+    
+    public void addAddressToCityInfo(Address address){
+        if(!this.addresses.contains(address)){
+            this.addresses.add(address);
+        }
+        if(!address.getCityInfo().equals(this)){
+            address.setCityInfo(this);
+        }
     }
 
     public List<Address> getAddresses() {
