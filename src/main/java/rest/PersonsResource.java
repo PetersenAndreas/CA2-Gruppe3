@@ -17,8 +17,8 @@ import javax.ws.rs.core.MediaType;
 import org.junit.jupiter.api.Disabled;
 
 //@Disabled
-@Path("person")
-public class PersonResource {
+@Path("persons")
+public class PersonsResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",

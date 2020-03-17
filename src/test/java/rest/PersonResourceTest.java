@@ -73,14 +73,14 @@ public class PersonResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/person").then().statusCode(200);
+        given().when().get("/persons").then().statusCode(200);
     }
    
     @Test
     public void testDummyMsg() throws Exception {
         given()
         .contentType("application/json")
-        .get("/person/").then()
+        .get("/persons/").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("msg", equalTo("Hello World"));   
@@ -90,7 +90,7 @@ public class PersonResourceTest {
     public void testPersonCount() throws Exception {
         given()
         .contentType("application/json")
-        .get("/person/count").then()
+        .get("/persons/count").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("count", equalTo(2));   
