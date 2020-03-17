@@ -39,7 +39,6 @@ public class PersonsResource {
 //    public String demo() {
 //        return "{\"msg\":\"Hello World\"}";
 //    }
-
     @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -47,14 +46,14 @@ public class PersonsResource {
         long count = FACADE.getPersonCount();
         return "{\"count\":" + count + "}";
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllPersons() {
         PersonsDTO all = FACADE.getAllPersons();
         return GSON.toJson(all);
     }
-    
+
     @Path("/{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -62,7 +61,7 @@ public class PersonsResource {
         PersonDTO person = FACADE.getPersonById(id);
         return GSON.toJson(person);
     }
-    
+
     @Path("/edit/{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -70,5 +69,16 @@ public class PersonsResource {
         PersonDTO newPerson = GSON.fromJson(person, PersonDTO.class);
         return GSON.toJson(newPerson);
     }
-    
+
+    @Path("/add")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String addPerson(String person) {
+        PersonDTO personAdd = GSON.fromJson(person, PersonDTO.class);
+        personAdd = FACADE.addPerson(personAdd);
+        return GSON.toJson(personAdd);
+
+    }
+
 }
