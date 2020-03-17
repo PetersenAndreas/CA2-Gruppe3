@@ -1,5 +1,6 @@
 package entities;
 
+import dto.PersonDTO;
 import facades.AddressFacade;
 import facades.CityInfoFacade;
 import facades.HobbyFacade;
@@ -50,11 +51,16 @@ public class SetupDummies {
         Person person3 = new Person("Mohamed", "Salah", "Pharaoh@gmail.com");
         Person person4 = new Person("Virgil", "van Dijk", "TopDefender@gmail.com");
         Person person5 = new Person("Keanu", "Reeves", "RealNeo@gmail.com");
-        PERSON_FACADE.addPerson(person1);
-        PERSON_FACADE.addPerson(person2);
-        PERSON_FACADE.addPerson(person3);
-        PERSON_FACADE.addPerson(person4);
-        PERSON_FACADE.addPerson(person5);
+        PersonDTO person1DTO = new PersonDTO(person1);
+        PersonDTO person2DTO = new PersonDTO(person2);
+        PersonDTO person3DTO = new PersonDTO(person3);
+        PersonDTO person4DTO = new PersonDTO(person4);
+        PersonDTO person5DTO = new PersonDTO(person5);
+        PERSON_FACADE.addPerson(person1DTO);
+        PERSON_FACADE.addPerson(person2DTO);
+        PERSON_FACADE.addPerson(person3DTO);
+        PERSON_FACADE.addPerson(person4DTO);
+        PERSON_FACADE.addPerson(person5DTO);
         
         Hobby hobby1 = new Hobby("MMA", "Beating people up");
         Hobby hobby2 = new Hobby("Football", "Most popular sport");
