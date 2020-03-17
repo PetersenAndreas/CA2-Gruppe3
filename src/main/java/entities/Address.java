@@ -23,7 +23,7 @@ public class Address implements Serializable {
     private String street;
 
     //Additional-info (add variables)!!
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private CityInfo cityInfo;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.DETACH)
@@ -35,19 +35,32 @@ public class Address implements Serializable {
     public Address(String street, CityInfo cityInfo, List<Person> persons) {
         this.street = street;
         this.cityInfo = cityInfo;
-        addAddressToCity(cityInfo);
+        addCityToAddress(cityInfo);
         this.persons = persons;
+        for (Person person : persons) {
+            addPersonToAddress(person);
+        }
     }
 
     public Address(String street, CityInfo cityInfo) {
         this.street = street;
         this.cityInfo = cityInfo;
-        addAddressToCity(cityInfo);
+        addCityToAddress(cityInfo);
     }
 
-    public void addAddressToCity(CityInfo cityInfo) {
-        if (!this.cityInfo.getAddresses().contains(this)) {
-            this.cityInfo.getAddresses().add(this);
+    public void addCityToAddress(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
+        if (!cityInfo.getAddresses().contains(this)) {
+            cityInfo.getAddresses().add(this);
+        }
+    }
+
+    public void addPersonToAddress(Person person) {
+        if (!this.persons.contains(this)) {
+            this.persons.add(person);
+        }
+        if (!person.getAddress().equals(this)) {
+            person.setAddress(this);
         }
     }
 
