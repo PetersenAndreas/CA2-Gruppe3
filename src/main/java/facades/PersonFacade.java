@@ -3,12 +3,13 @@ package facades;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Address;
-import entities.Hobby;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import entities.Person;
 import entities.Phone;
+import exceptions.NoResultFoundException;
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 public class PersonFacade {
@@ -105,5 +106,34 @@ public class PersonFacade {
         } finally {
             em.close();
         }
+    }
+    
+    //Get all persons
+    public PersonsDTO getAllPersons(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
+            List<Person> dbList = query.getResultList();
+            PersonsDTO result = new PersonsDTO(dbList);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+    
+    // Get person with a given ID
+    public PersonDTO getPersonById(Long id) throws NoResultFoundException{
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.id = :id", Person.class);
+            tq.setParameter("id", id);
+            Person person = tq.getSingleResult();
+            PersonDTO result = new PersonDTO(person);
+            return result;
+        } catch(NoResultException e) {
+            throw new NoResultFoundException("No person with given ID");
+        }finally{  
+            em.close();
+        }    
     }
 }

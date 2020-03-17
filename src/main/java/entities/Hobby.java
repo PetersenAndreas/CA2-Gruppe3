@@ -1,7 +1,9 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +21,9 @@ public class Hobby implements Serializable {
     private Long id;
     private String name;
     private String description;
-    
-    @ManyToMany(mappedBy = "hobbies")
-    private List<Person> persons;
+
+    @ManyToMany(mappedBy = "hobbies", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Person> persons = new ArrayList();
 
     public Hobby(String name, String description) {
         this.name = name;
@@ -36,11 +38,15 @@ public class Hobby implements Serializable {
     
     public Hobby() {}
     
-    public void addPersons(Person person) {
-        persons.add(person);
-        person.addHobbies(this);
+    public void addPersonToHobby(Person person){
+        if(!this.persons.contains(person)){
+            this.persons.add(person);
+        }
+        if(!person.getHobbies().contains(this)){
+            person.addHobbyToPerson(this);
+        }
     }
-    
+
     public Long getId() {
         return id;
     }
