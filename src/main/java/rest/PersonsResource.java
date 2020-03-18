@@ -76,7 +76,7 @@ public class PersonsResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public String addPerson(String person) {
+    public String addPerson(String person) throws InvalidInputException {
         PersonDTO personAdd = GSON.fromJson(person, PersonDTO.class);
         personAdd = FACADE.addPerson(personAdd);
         return GSON.toJson(personAdd);

@@ -127,8 +127,9 @@ public class PersonFacadeTest {
     }
 
     @Test
-    public void testAddPerson() {
+    public void testAddPerson() throws InvalidInputException {
         Person testPerson = new Person("Muhammad", "Ali", "Champ@gmail.com");
+        testPerson.addAddressToPerson(address1);
         Long expectedId = highestId + 1;
         PersonDTO testPersonDTO = new PersonDTO(testPerson);
         PersonDTO result = facade.addPerson(testPersonDTO);

@@ -114,13 +114,20 @@ public class PersonFacade {
     }
 
     // Create a Person (with hobbies, phone, address etc.)
-    public PersonDTO addPerson(PersonDTO person) {
+    public PersonDTO addPerson(PersonDTO personDTO) throws InvalidInputException {
         EntityManager em = emf.createEntityManager();
+        validateInput(personDTO);
         try {
-            Person newPerson = new Person(person.getFirstName(), person.getLastName(), person.getEmail());
-
             em.getTransaction().begin();
+            List<Hobby> allHobbies = em.createQuery("SELECT h From Hobby h", Hobby.class).getResultList();
+            Person newPerson = new Person(personDTO.getFirstName(), personDTO.getLastName(), personDTO.getEmail());
             em.persist(newPerson);
+            setStreet(em, personDTO, newPerson);
+            setHobby(personDTO, allHobbies, newPerson);
+            for (PhoneDTO newPhone : personDTO.getPhones().getPhones()) {
+                Phone phone = new Phone(newPhone.getNumber(), newPhone.getDescription(), newPerson);
+                em.persist(phone);
+            }
             em.getTransaction().commit();
             PersonDTO result = new PersonDTO(newPerson);
             return result;
@@ -158,8 +165,8 @@ public class PersonFacade {
         }
     }
 
-    public void editPerson(PersonDTO p, Long id) throws InvalidInputException {
-        validateInput(p);
+    public void editPerson(PersonDTO personDTO, Long id) throws InvalidInputException {
+        validateInput(personDTO);
 
         EntityManager em = emf.createEntityManager();
         try {
@@ -168,18 +175,15 @@ public class PersonFacade {
             Person person = tq.getSingleResult();
 
             // Update firstName, lastName and Email
-            person.setFirstName(p.getFirstName());
-            person.setLastName(p.getLastName());
-            person.setEmail(p.getEmail());
+            person.setFirstName(personDTO.getFirstName());
+            person.setLastName(personDTO.getLastName());
+            person.setEmail(personDTO.getEmail());
 
             // Update Address
             if(!Objects.isNull(person.getAddress())){
                 person.getAddress().getPersons().remove(person);
             }
-            Address address = em.createQuery("SELECT a From Address a WHERE a.street = :street", Address.class)
-                    .setParameter("street", p.getStreet())
-                    .getSingleResult();
-            person.addAddressToPerson(address);
+            setStreet(em, personDTO, person);
 
             // Update Hobbies
             List<Hobby> allHobbies = em.createQuery("SELECT h From Hobby h", Hobby.class).getResultList();
@@ -187,22 +191,13 @@ public class PersonFacade {
                 hobby.getPersons().remove(person);
             }
             person.getHobbies().clear();
-            for (String hobby : p.getHobbies()) {
-                Hobby newHobby = null;
-                for (Hobby dbHobby : allHobbies) {
-                    if (dbHobby.getName().toLowerCase().equals(hobby.toLowerCase())) {
-                        newHobby = dbHobby;
-                        break;
-                    }
-                }
-                person.addHobbyToPerson(newHobby);
-            }
+            setHobby(personDTO, allHobbies, person);
 
             // Update Phones
             // Remove phones no longer connected
             for (Phone phone : person.getPhones()) {
                 boolean matchFound = false;
-                for (PhoneDTO newPhone : p.getPhones().getPhones()) {
+                for (PhoneDTO newPhone : personDTO.getPhones().getPhones()) {
                     if (Objects.equals(phone.getNumber(), newPhone.getNumber())) {
                         matchFound = true;
                         phone.setDescription(newPhone.getDescription());
@@ -216,7 +211,7 @@ public class PersonFacade {
             }
 
             // Add new phones
-            for (PhoneDTO newPhone : p.getPhones().getPhones()) {
+            for (PhoneDTO newPhone : personDTO.getPhones().getPhones()) {
                 boolean matchFound = false;
                 for (Phone phone : person.getPhones()) {
                     if (Objects.equals(phone.getNumber(), newPhone.getNumber())) {
@@ -233,6 +228,26 @@ public class PersonFacade {
         } finally {
             em.close();
         }
+    }
+
+    public void setHobby(PersonDTO personDTO, List<Hobby> allHobbies, Person person) {
+        for (String hobby : personDTO.getHobbies()) {
+            Hobby newHobby = null;
+            for (Hobby dbHobby : allHobbies) {
+                if (dbHobby.getName().toLowerCase().equals(hobby.toLowerCase())) {
+                    newHobby = dbHobby;
+                    break;
+                }
+            }
+            person.addHobbyToPerson(newHobby);
+        }
+    }
+
+    public void setStreet(EntityManager em, PersonDTO personDTO, Person person) {
+        Address address = em.createQuery("SELECT a From Address a WHERE a.street = :street", Address.class)
+                .setParameter("street", personDTO.getStreet())
+                .getSingleResult();
+        person.addAddressToPerson(address);
     }
 
     private void validateInput(PersonDTO newPerson) throws InvalidInputException {

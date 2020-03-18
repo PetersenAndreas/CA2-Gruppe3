@@ -1,6 +1,7 @@
 package entities;
 
 import dto.PersonDTO;
+import exceptions.InvalidInputException;
 import facades.AddressFacade;
 import facades.CityInfoFacade;
 import facades.HobbyFacade;
@@ -25,7 +26,7 @@ public class SetupDummies {
     private static final AddressFacade ADDRESS_FACADE = AddressFacade.getAddressFacade(EMF);
     private static final PhoneFacade PHONE_FACADE = PhoneFacade.getPhoneFacade(EMF);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidInputException {
         EntityManager em = EMF.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -45,23 +46,7 @@ public class SetupDummies {
           addEntities();
     }
 
-    private static void addEntities() {
-        Person person1 = new Person("Khabib", "Nurmagomedov", "LwChamp@gmail.com");
-        Person person2 = new Person("Tony", "Ferguson", "PplChamp@gmail.com");
-        Person person3 = new Person("Mohamed", "Salah", "Pharaoh@gmail.com");
-        Person person4 = new Person("Virgil", "van Dijk", "TopDefender@gmail.com");
-        Person person5 = new Person("Keanu", "Reeves", "RealNeo@gmail.com");
-        PersonDTO person1DTO = new PersonDTO(person1);
-        PersonDTO person2DTO = new PersonDTO(person2);
-        PersonDTO person3DTO = new PersonDTO(person3);
-        PersonDTO person4DTO = new PersonDTO(person4);
-        PersonDTO person5DTO = new PersonDTO(person5);
-        PERSON_FACADE.addPerson(person1DTO);
-        PERSON_FACADE.addPerson(person2DTO);
-        PERSON_FACADE.addPerson(person3DTO);
-        PERSON_FACADE.addPerson(person4DTO);
-        PERSON_FACADE.addPerson(person5DTO);
-        
+    private static void addEntities() throws InvalidInputException {
         Hobby hobby1 = new Hobby("MMA", "Beating people up");
         Hobby hobby2 = new Hobby("Football", "Most popular sport");
         Hobby hobby3 = new Hobby("Hockey", "Canadians love it");
@@ -105,6 +90,22 @@ public class SetupDummies {
         PHONE_FACADE.addPhone(phone3);
         PHONE_FACADE.addPhone(phone4);
         PHONE_FACADE.addPhone(phone5);
+        
+        Person person1 = new Person("Khabib", "Nurmagomedov", "LwChamp@gmail.com");
+        Person person2 = new Person("Tony", "Ferguson", "PplChamp@gmail.com");
+        Person person3 = new Person("Mohamed", "Salah", "Pharaoh@gmail.com");
+        Person person4 = new Person("Virgil", "van Dijk", "TopDefender@gmail.com");
+        Person person5 = new Person("Keanu", "Reeves", "RealNeo@gmail.com");
+        PersonDTO person1DTO = new PersonDTO(person1);
+        PersonDTO person2DTO = new PersonDTO(person2);
+        PersonDTO person3DTO = new PersonDTO(person3);
+        PersonDTO person4DTO = new PersonDTO(person4);
+        PersonDTO person5DTO = new PersonDTO(person5);
+        PERSON_FACADE.addPerson(person1DTO);
+        PERSON_FACADE.addPerson(person2DTO);
+        PERSON_FACADE.addPerson(person3DTO);
+        PERSON_FACADE.addPerson(person4DTO);
+        PERSON_FACADE.addPerson(person5DTO);
         
         
         person1.addHobbyToPerson(hobby1);
