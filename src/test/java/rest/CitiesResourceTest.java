@@ -148,36 +148,33 @@ public class CitiesResourceTest {
         given().when().get("/cities").then().statusCode(200);
     }
 
-    
     @Test
-    public void getCities(){
-        
-       int listOfCitiesInfo = cityArray.length;
-               
-       CitiesInfoDTO resultList = given().when()
+    public void getCities() {
+
+        int listOfCitiesInfo = cityArray.length;
+
+        CitiesInfoDTO resultList = given().when()
                 .contentType("application/json")
                 .get("cities")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .extract().body().as(CitiesInfoDTO.class);
-       
-       assertEquals(listOfCitiesInfo,resultList.getCitiesInfo().size());
-    
+
+        assertEquals(listOfCitiesInfo, resultList.getCitiesInfo().size());
+
     }
-    
-    
-    
+
     @Test
     public void testGetPersonsFromCity() {
-        
+
         CityInfo expectedCity = city4;
-        int expectedCityId = Math.toIntExact(expectedCity.getId());
-        PersonsDTO dbList = facade.getPersonsFromCity(expectedCity.getId());
+        String expectedCityZip = expectedCity.getZipCode();
+        PersonsDTO dbList = facade.getPersonsFromCity(expectedCity.getZipCode());
 
         PersonsDTO result = given().when()
                 .contentType("application/json")
-                .get("/cities/" + expectedCityId)
+                .get("/cities/" + expectedCityZip)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
