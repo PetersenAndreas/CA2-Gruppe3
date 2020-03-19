@@ -1,24 +1,23 @@
 package dto;
 
 import entities.Address;
-import entities.CityInfo;
 
 public class AddressDTO {
     
     private String street;
-    private CityInfo cityInfo;
+    private CityInfoDTO city;
     
     public AddressDTO() {
     }
     
-    public AddressDTO(String street, CityInfo cityInfo) {
+    public AddressDTO(String street, CityInfoDTO cityInfo) {
         this.street = street;
-        this.cityInfo = cityInfo;
+        this.city = cityInfo;
     }
     
     public AddressDTO(Address address) {
         this.street = address.getStreet();
-        this.cityInfo = address.getCityInfo();
+        this.city = new CityInfoDTO(address.getCityInfo());
     }
 
     public String getStreet() {
@@ -29,12 +28,11 @@ public class AddressDTO {
         this.street = street;
     }
 
-    public CityInfo getCityInfo() {
-        return cityInfo;
+    public CityInfoDTO getCityInfo() {
+        return city;
     }
 
-    public void setCityInfo(CityInfo cityInfo) {
-        this.cityInfo = cityInfo;
+    public void setCityInfo(CityInfoDTO cityInfo) {
+        this.city = cityInfo;
     }
-    
 }

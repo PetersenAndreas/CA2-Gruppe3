@@ -38,6 +38,7 @@ public class AddressesResourceTest {
     private static final String SERVER_URL = "http://localhost/api";
     private static Address a1, a2, a3;
     private static CityInfo city1, city2, city3;
+    private static Address[] addressArray;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -69,7 +70,7 @@ public class AddressesResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        city1 = new CityInfo("2660", "Brøndby Strand");
+        city1 = new CityInfo("2660", "Brondby Strand");
         city2 = new CityInfo("3030", "Capital");
         city3 = new CityInfo("8210", "Aarhus");
         a1 = new Address("Strandvejen", city1);
@@ -89,6 +90,7 @@ public class AddressesResourceTest {
         } finally {
             em.close();
         }
+        addressArray = new Address[]{a1, a2, a3};
     }
 
      private static void emptyDatabase() {
@@ -110,7 +112,7 @@ public class AddressesResourceTest {
     public void tearDown() {
         emptyDatabase();
     }
-
+    
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
@@ -124,6 +126,6 @@ public class AddressesResourceTest {
                 .get("/addresses/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(3));
+                .body("count", equalTo(addressArray.length));
     }
 }

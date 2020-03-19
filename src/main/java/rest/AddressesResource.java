@@ -2,7 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.AddressDTO;
 import dto.AddressesDTO;
+import exceptions.InvalidInputException;
 import facades.AddressFacade;
 import utils.EMF_Creator;
 import javax.persistence.EntityManagerFactory;
@@ -29,8 +31,8 @@ public class AddressesResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllAddresses() {
-        AddressesDTO all = FACADE.getAllAddresses();
-        return GSON.toJson(all);
+        AddressesDTO allAddresses = FACADE.getAllAddresses();
+        return GSON.toJson(allAddresses);
     }
     
     @Path("count")
@@ -41,13 +43,13 @@ public class AddressesResource {
         return "{\"count\":" + count + "}";
     }
 
-//    @Path("/add")
-//    @POST
-//    @Consumes({MediaType.APPLICATION_JSON})
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String addAddress(String address) throws InvalidInputException {
-//        AddressDTO addressAdd = GSON.fromJson(address, AddressDTO.class);
-//        addressAdd = FACADE.addAddress(addressAdd);
-//        return GSON.toJson(addressAdd);
-//    }
+    @Path("/add")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String addAddress(String address) throws InvalidInputException {
+        AddressDTO addressAdd = GSON.fromJson(address, AddressDTO.class);
+        addressAdd = FACADE.addAddress(addressAdd);
+        return GSON.toJson(addressAdd);
+    }
 }
