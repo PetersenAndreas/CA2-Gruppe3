@@ -216,4 +216,40 @@ public class PersonResourceTest {
         }
 
     }
+    
+    @Test
+    public void testAddPerson() throws Exception{
+        
+        Person newPerson = new Person("Jens Jensen", "jens@jensen.dk", "11111111");
+        Address expectedAddress = a1;
+        newPerson.addAddressToPerson(expectedAddress);
+        PersonDTO pDTO = new PersonDTO(newPerson);
+        
+        given()
+                .contentType("application/json").body(pDTO)
+                .when().post("/persons/add/")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+        EntityManager em = emf.createEntityManager();
+        try {
+            Person dbResult = em.createQuery("Select p from Person p WHERE p.id = :id", Person.class)
+                    .setParameter("id", (highestId + 1))
+                    .getSingleResult();
+
+            assertEquals(pDTO.getFirstName(), dbResult.getFirstName());
+            assertEquals(pDTO.getLastName(), dbResult.getLastName());
+            assertEquals(pDTO.getEmail(), dbResult.getEmail());
+            assertEquals(expectedAddress, dbResult.getAddress());
+            assertTrue(dbResult.getPhones().isEmpty());
+            assertTrue(dbResult.getHobbies().isEmpty());
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        } finally {
+            em.close();
+        }
+
+        
+    }
 }
