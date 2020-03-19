@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import dto.PersonsDTO;
-import entities.Person;
 import exceptions.InvalidInputException;
 import exceptions.NoResultFoundException;
 import utils.EMF_Creator;
@@ -18,9 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.junit.jupiter.api.Disabled;
 
-//@Disabled
 @Path("persons")
 public class PersonsResource {
 
@@ -34,24 +31,19 @@ public class PersonsResource {
     private static final PersonFacade FACADE = PersonFacade.getPersonFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String demo() {
-//        return "{\"msg\":\"Hello World\"}";
-//    }
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllPersons() {
+        PersonsDTO all = FACADE.getAllPersons();
+        return GSON.toJson(all);
+    }
+    
     @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPersonCount() {
         long count = FACADE.getPersonCount();
         return "{\"count\":" + count + "}";
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getAllPersons() {
-        PersonsDTO all = FACADE.getAllPersons();
-        return GSON.toJson(all);
     }
 
     @Path("/{id}")
@@ -80,7 +72,5 @@ public class PersonsResource {
         PersonDTO personAdd = GSON.fromJson(person, PersonDTO.class);
         personAdd = FACADE.addPerson(personAdd);
         return GSON.toJson(personAdd);
-
     }
-
 }

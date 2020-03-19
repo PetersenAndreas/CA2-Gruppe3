@@ -1,11 +1,15 @@
 package facades;
 
+import dto.HobbiesDTO;
 import dto.HobbyDTO;
-import dto.PersonDTO;
+import dto.PersonsDTO;
 import entities.Hobby;
 import entities.Person;
+import exceptions.InvalidInputException;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 public class HobbyFacade {
 
@@ -26,6 +30,7 @@ public class HobbyFacade {
         return emf.createEntityManager();
     }
     
+    // Get amount of hobbies in database
     public long getHobbyCount(){
         EntityManager em = getEntityManager();
         try{
@@ -36,14 +41,53 @@ public class HobbyFacade {
         }
     }
     
+    // Get all hobbies
+    public HobbiesDTO getAllHobbies() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Hobby> query = em.createQuery("SELECT h FROM Hobby h", Hobby.class);
+            List<Hobby> dbList = query.getResultList();
+            HobbiesDTO result = new HobbiesDTO(dbList);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+    
     // Create a hobby
-    public HobbyDTO addHobby(Hobby hobby) {
+    public HobbyDTO addHobby(HobbyDTO hobbyDTO) throws InvalidInputException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(hobby);
+            Hobby newHobby = new Hobby(hobbyDTO.getDescription(), hobbyDTO.getName());
+            em.persist(newHobby);
             em.getTransaction().commit();
-            HobbyDTO result = new HobbyDTO(hobby);
+            HobbyDTO result = new HobbyDTO(newHobby);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+    
+        // Get the count of people with a given hobby
+    public long getPersonCountByHobby(String hobby) {
+        EntityManager em = emf.createEntityManager();
+        try{
+            long personCount = (long) em.createQuery("SELECT COUNT(p) FROM Person p Join p.hobbies h WHERE h.name = :hobbies").setParameter("hobbies", hobby).getSingleResult();
+            return personCount;
+        }finally{  
+            em.close();
+        }
+    }
+    
+    // "Get all persons with a given hobby"
+    public PersonsDTO getPersonsByHobby(String hobby) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.hobbies h WHERE h.name = :hobbies", Person.class);
+            tq.setParameter("hobbies", hobby);
+            List<Person> resultList = tq.getResultList();
+            PersonsDTO result = new PersonsDTO(resultList);
             return result;
         } finally {
             em.close();

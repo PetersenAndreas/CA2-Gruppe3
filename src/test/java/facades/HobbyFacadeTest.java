@@ -1,12 +1,15 @@
 package facades;
 
+import dto.HobbyDTO;
 import entities.Hobby;
+import exceptions.InvalidInputException;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ public class HobbyFacadeTest {
     private static HobbyFacade facade;
     private static Hobby hobby1, hobby2, hobby3, hobby4;
     private static Hobby[] hobbyArray;
+    private static long highestID;
 
     public HobbyFacadeTest() {}
 
@@ -62,6 +66,13 @@ public class HobbyFacadeTest {
             em.close();
         }
         hobbyArray = new Hobby[]{hobby1, hobby2, hobby3, hobby4};
+        
+        highestID = 0L;
+        for (Hobby hobby : hobbyArray) {
+            if (hobby.getId() > highestID) {
+                highestID = hobby.getId();
+            }
+        }
     }
     
     private static void emptyDatabase() {
@@ -69,6 +80,10 @@ public class HobbyFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Hobby.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
+            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -85,5 +100,15 @@ public class HobbyFacadeTest {
         long result = facade.getHobbyCount();
         int expectedResult = hobbyArray.length;
         assertEquals(expectedResult, result);
+    }
+    
+    @Test
+    public void testAddHobby() throws InvalidInputException {
+        Hobby testHobby = new Hobby("Video games", "Spending time wisely");
+        Long expectedId = highestID + 1;
+        HobbyDTO testHobbyDTO = new HobbyDTO(testHobby);
+        HobbyDTO result = facade.addHobby(testHobbyDTO);
+//        assertEquals(expectedId, testHobby.getId());
+//        assertTrue(result.getName().equals(testHobby.getName()));
     }
 }

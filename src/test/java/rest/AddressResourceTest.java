@@ -1,12 +1,18 @@
 package rest;
 
+import dto.PersonDTO;
+import dto.PersonsDTO;
 import entities.Address;
 import entities.CityInfo;
+import entities.Person;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -17,12 +23,15 @@ import org.glassfish.jersey.server.ResourceConfig;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import utils.EMF_Creator.DbSelector;
+import utils.EMF_Creator.Strategy;
 
-@Disabled
 public class AddressResourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -82,7 +91,7 @@ public class AddressResourceTest {
         }
     }
 
-    private static void emptyDatabase() {
+     private static void emptyDatabase() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -105,23 +114,14 @@ public class AddressResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/address").then().statusCode(200);
+        given().when().get("/addresses").then().statusCode(200);
     }
 
     @Test
-    public void testDummyMsg() throws Exception {
+    public void testAddressCount() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/address/").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode());
-    }
-
-    @Test
-    public void testPersonCount() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/address/count").then()
+                .get("/addresses/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("count", equalTo(3));
