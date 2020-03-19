@@ -5,6 +5,8 @@
  */
 fetchAllPersons();
 
+let personHobbies = [];
+
 function clickSearchID(evt) {
     evt.preventDefault();
     fetchPersonOnId();
@@ -77,29 +79,39 @@ document.getElementById("searchIdBtn").addEventListener("click", clickSearchID);
 
 function loadeCreate() {
     
-    let hobbies;
     let url = "api/hobbies/"; 
     fetch(url)
             .then(res => res.json())
             .then(data => {
-                hobbies = data;
-    });
-    
-    
-    
-    document.getElementById("myDiv").innerHTML = 
+            document.getElementById("myDiv").innerHTML = 
             "<input type='text' name='txt' value='' id='firstName' placeholder='First Name' style='width: 150px'/>" + "  First Name"
             + '<br>' + "<input type='text' name='txt' value=''id='lastName' placeholder='Last Name'/ style='width: 150px'>" + "  Last Name"
             + '<br>' + "<input type='text' name='txt' value=''id='email' placeholder='Email' style='width: 150px'/>" + "  Email"
             + '<br>' + "<input type='text' name='txt' value=''id='phone' placeholder='Phone' style='width: 150px'/>" + "  Phone"
-            + '<br>' + "<select id='hobby' size='1' style='width: 155px' multiple='multiple'>" + 
-            "<option>"+ hobbies.hobbies.map(x => x.name).join("</option><option>") +"</option>" + "</select>" + "  Hobbies"
+            + '<br>' + createPersonHobbyTable()
+            + "<p id='disAddedHobby'></p>"
+            + '<br>' + "<button id='addBtn'>ADD Hobby to Person</button>"
             + '<br>' + "<button id='createbtn'>Create</button>";
+            
+    });
+    document.getElementById("addBtn").addEventListener("click", addHobbyToArray);
+    personHobbies = [];
+    
+    
+   
 
 }
+
+function addHobbyToArray() {
+    personHobbies[document.getElementById("hobby").text];
+}
+
 document.getElementById("createSelection").addEventListener("click", create);
 
-
+function createPersonHobbyTable() {
+    let headers = "<table><tr><th>Hobby Name</th><th>Description</th><th>Select</th></tr></table>";
+    
+}
 
 
 
