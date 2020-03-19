@@ -94,16 +94,6 @@ public class HobbiesResourceTest {
         System.out.println("Testing is server UP");
         given().when().get("/hobbies").then().statusCode(200);
     }
-   
-    @Test
-    public void testDummyMsg() throws Exception {
-        given()
-        .contentType("application/json")
-        .get("/hobbies/").then()
-        .assertThat()
-        .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("msg", equalTo("Hello World"));   
-    }
     
     @Test
     public void testHobbyCount() throws Exception {

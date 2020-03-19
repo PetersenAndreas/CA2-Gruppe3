@@ -1,9 +1,17 @@
 package facades;
 
 import dto.AddressDTO;
+import dto.AddressesDTO;
+import dto.PersonsDTO;
 import entities.Address;
+import entities.CityInfo;
+import entities.Person;
+import exceptions.InvalidInputException;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 public class AddressFacade {
 
@@ -26,13 +34,22 @@ public class AddressFacade {
     }
     
     // Create an address
-    public AddressDTO addAddress(Address address) {
+    public AddressDTO addAddress(AddressDTO addressDTO) throws InvalidInputException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(address);
+            CityInfo city;
+            try {
+            city = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode = :zipCode", CityInfo.class)
+                    .setParameter("zipCode", addressDTO.getCityInfo().getZipCode())
+                    .getSingleResult();
+            }catch(NoResultException e) {
+                throw new InvalidInputException("Field ‘zipCode’ value ‘"+addressDTO.getCityInfo().getZipCode()+"’ is invalid");
+            }
+            Address newAddress = new Address(addressDTO.getStreet(), city);
+            em.persist(newAddress);
             em.getTransaction().commit();
-            AddressDTO result = new AddressDTO(address);
+            AddressDTO result = new AddressDTO(newAddress);
             return result;
         } finally {
             em.close();
@@ -44,6 +61,19 @@ public class AddressFacade {
         try {
             long addressCount = (long) em.createQuery("SELECT COUNT(a) FROM Address a").getSingleResult();
             return addressCount;
+        } finally {
+            em.close();
+        }
+    }
+    
+    //Get all addresses
+    public AddressesDTO getAllAddresses() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Address> query = em.createQuery("SELECT a FROM Address a", Address.class);
+            List<Address> dbList = query.getResultList();
+            AddressesDTO result = new AddressesDTO(dbList);
+            return result;
         } finally {
             em.close();
         }

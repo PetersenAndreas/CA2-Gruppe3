@@ -1,20 +1,17 @@
 package facades;
 
 import dto.AddressDTO;
+import dto.CityInfoDTO;
 import entities.Address;
 import entities.CityInfo;
-import entities.Hobby;
-import entities.Person;
 import exceptions.InvalidInputException;
-import java.util.ArrayList;
-import java.util.List;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,12 +19,10 @@ import org.junit.jupiter.api.Test;
 public class AddressFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static AddressFacade addressFacade;
-    private static CityInfoFacade cityInfoFacade;
+    private static AddressFacade FACADE;
     private static CityInfo city1, city2, city3;
     private static Address a1, a2, a3;
-    private static List<CityInfo> cityInfoList = new ArrayList();
-    private static List<Address> addressList = new ArrayList();
+    private static Address[] addressArray;
 
     public AddressFacadeTest() {
     }
@@ -39,15 +34,13 @@ public class AddressFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.DROP_AND_CREATE);
-        addressFacade = AddressFacade.getAddressFacade(emf);
-        cityInfoFacade = CityInfoFacade.getCityInfoFacade(emf);
+        FACADE = AddressFacade.getAddressFacade(emf);
     }
 
     @BeforeAll
     public static void setUpClassV2() {
         emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
-        addressFacade = AddressFacade.getAddressFacade(emf);
-        cityInfoFacade = CityInfoFacade.getCityInfoFacade(emf);
+        FACADE = AddressFacade.getAddressFacade(emf);
     }
 
     @AfterAll
@@ -62,11 +55,11 @@ public class AddressFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             city1 = new CityInfo("3030", "Capital");
-            city2 = new CityInfo("3030", "Capital");
-            city3 = new CityInfo("3030", "Capital");
+            city2 = new CityInfo("3020", "West City");
+            city3 = new CityInfo("3010", "East City");
             a1 = new Address("Home", city1);
-            a2 = new Address("Home", city2);
-            a3 = new Address("Home", city3);
+            a2 = new Address("Work", city2);
+            a3 = new Address("Vacation", city3);
             em.persist(city1);
             em.persist(city2);
             em.persist(city3);
@@ -77,6 +70,7 @@ public class AddressFacadeTest {
         } finally {
             em.close();
         }
+        addressArray = new Address[]{a1, a2, a3};
     }
 
     private static void emptyDatabase() {
@@ -101,17 +95,28 @@ public class AddressFacadeTest {
 
     @Test
     public void testAddressFacade() {
-        long result = addressFacade.getAddressCount();
-        int expectedResult = addressList.size();
-        assertEquals(3, result);
+        long result = FACADE.getAddressCount();
+        int expectedResult = addressArray.length;
+        assertEquals(expectedResult, result);
     }
 
     @Test
     public void testAddAddress() throws InvalidInputException {
-        CityInfo testCity = new CityInfo ("20000", "Missouri");
-        Address testAddress = new Address("Missouri Street", testCity);
-        AddressDTO result = addressFacade.addAddress(testAddress);
-        assertEquals(testCity, result.getCityInfo());
-        assertTrue(testAddress.getStreet().equals(result.getStreet()));
+        CityInfoDTO testCity = new CityInfoDTO (city1);
+        AddressDTO testAddress = new AddressDTO("Missouri Street", testCity);
+        AddressDTO result = FACADE.addAddress(testAddress);
+        assertEquals(testCity.getZipCode(), result.getCityInfo().getZipCode());
+        assertEquals(testCity.getCityName(), result.getCityInfo().getCityName());
+        assertEquals(testAddress.getStreet(), result.getStreet());
+        // TODO - TEST DATABASE
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            Address dbResult = em.createQuery("Select a FROM Address a", Address.class);
+//            dbResult.
+//        } catch (Exception e) {
+//            fail(e.getMessage());
+//        } finally {
+//            em.close();
+//        }
     }
 }

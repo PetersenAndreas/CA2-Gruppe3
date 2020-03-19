@@ -1,29 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.CitiesInfoDTO;
+import dto.CityInfoDTO;
 import dto.PersonsDTO;
+import exceptions.InvalidInputException;
 import facades.CityInfoFacade;
-import facades.PersonFacade;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import utils.EMF_Creator;
 
-/**
- * REST Web Service
- *
- * @author Bruger
- */
 @Path("cities")
 public class CitiesResource {
 
@@ -34,26 +27,39 @@ public class CitiesResource {
             "ax2",
             EMF_Creator.Strategy.CREATE);
 
-    private static final PersonFacade FACADE = PersonFacade.getPersonFacade(EMF);
-    private static final CityInfoFacade FACADE_CITY = CityInfoFacade.getCityInfoFacade(EMF);
+    private static final CityInfoFacade FACADE = CityInfoFacade.getCityInfoFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllCities() {
-        CitiesInfoDTO cities = FACADE_CITY.getAllCityInfoes();
+        CitiesInfoDTO cities = FACADE.getAllCityInfoes();
         return GSON.toJson(cities);
     }
-
+    
+    @Path("count")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getCityCount() {
+        long count = FACADE.getCityCount();
+        return "{\"count\":" + count + "}";
+    }
     
     @Path("/{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPersonsFromCity(@PathParam("id") String zip) {
-    PersonsDTO persons = FACADE_CITY.getPersonsFromCity(zip);
+    PersonsDTO persons = FACADE.getPersonsFromCity(zip);
     return GSON.toJson(persons);
     }
     
+    @Path("/add")
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public String addCity(String city) throws InvalidInputException {
+        CityInfoDTO cityAdd = GSON.fromJson(city, CityInfoDTO.class);
+        cityAdd = FACADE.addCityInfo(cityAdd);
+        return GSON.toJson(cityAdd);
+    }
 }

@@ -5,6 +5,7 @@ import dto.CityInfoDTO;
 import dto.PersonsDTO;
 import entities.CityInfo;
 import entities.Person;
+import exceptions.InvalidInputException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -31,19 +32,21 @@ public class CityInfoFacade {
     }
     
     // Create a city
-    public CityInfoDTO addCityInfo(CityInfo city) {
+    public CityInfoDTO addCityInfo(CityInfoDTO cityDTO) throws InvalidInputException {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(city);
+            CityInfo newCity = new CityInfo(cityDTO.getCityName(), cityDTO.getZipCode());
+            em.persist(newCity);
             em.getTransaction().commit();
-            CityInfoDTO result = new CityInfoDTO(city);
+            CityInfoDTO result = new CityInfoDTO(newCity);
             return result;
         } finally {
             em.close();
         }
     }
 
+    // Get amount of cities in database
     public long getCityCount() {
         EntityManager em = getEntityManager();
         try {
@@ -54,6 +57,7 @@ public class CityInfoFacade {
         }
     }
 
+    // Get all the cities in the database, with details
     public CitiesInfoDTO getAllCityInfoes() {
 
         EntityManager em = emf.createEntityManager();
@@ -68,7 +72,8 @@ public class CityInfoFacade {
         }
     }
 
-    public CityInfoDTO getCitiesInfoByZipCode(String zip) {
+    // Get a city by it's zip code
+    public CityInfoDTO getCityInfoByZipCode(String zip) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<CityInfo> tq = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode = :zipCode", CityInfo.class);
@@ -81,23 +86,17 @@ public class CityInfoFacade {
         }
     }
 
+    // Get all persons living in a given city
     public PersonsDTO getPersonsFromCity(String zip) {
-
         EntityManager em = emf.createEntityManager();
-
         try {
-
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.zipCode = :zipCode",
-                    Person.class);
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.zipCode = :zipCode", Person.class);
             tq.setParameter("zipCode", zip);
             List<Person> persons = tq.getResultList();
             PersonsDTO result = new PersonsDTO(persons);
             return result;
-
         } finally {
             em.close();
         }
-
     }
-
 }
