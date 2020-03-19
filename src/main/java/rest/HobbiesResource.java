@@ -2,7 +2,6 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.HobbiesDTO;
 import dto.HobbyDTO;
 import dto.PersonsDTO;
 import exceptions.InvalidInputException;
@@ -34,8 +33,7 @@ public class HobbiesResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllHobbies() {
-        HobbiesDTO allHobbies = FACADE.getAllHobbies();
-        return GSON.toJson(allHobbies);
+        return GSON.toJson(FACADE.getAllHobbies());
     }
     
     @Path("count")
