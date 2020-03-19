@@ -124,21 +124,21 @@ public class SetupDummies {
         person4.addAddressToPerson(address5);
         person5.addAddressToPerson(address4);
         
-//        hobby1.addPersonToHobby(person1);
-//        hobby1.addPersonToHobby(person2);
-//        hobby2.addPersonToHobby(person3);
-//        hobby2.addPersonToHobby(person4);
-//        hobby4.addPersonToHobby(person5);
-//        phone1.addPhoneToPerson(person5);
-//        phone2.addPhoneToPerson(person3);
-//        phone4.addPhoneToPerson(person2);
-//        phone4.addPhoneToPerson(person4);
-//        phone5.addPhoneToPerson(person1);
-//        address1.addPersonToAddress(person2);
-//        address2.addPersonToAddress(person3);
-//        address3.addPersonToAddress(person1);
-//        address4.addPersonToAddress(person5);
-//        address5.addPersonToAddress(person4);
+        hobby1.addPersonToHobby(person1);
+        hobby1.addPersonToHobby(person2);
+        hobby2.addPersonToHobby(person3);
+        hobby2.addPersonToHobby(person4);
+        hobby4.addPersonToHobby(person5);
+        phone1.addPhoneToPerson(person5);
+        phone2.addPhoneToPerson(person3);
+        phone4.addPhoneToPerson(person2);
+        phone4.addPhoneToPerson(person4);
+        phone5.addPhoneToPerson(person1);
+        address1.addPersonToAddress(person2);
+        address2.addPersonToAddress(person3);
+        address3.addPersonToAddress(person1);
+        address4.addPersonToAddress(person5);
+        address5.addPersonToAddress(person4);
     }
 //    
 //    private static void addPersons() {
