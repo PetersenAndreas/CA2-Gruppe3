@@ -30,8 +30,8 @@ public class HobbiesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello World\"}";
+    public String getAllHobbies() {
+        return GSON.toJson(hobbyFacade.getAllHobbies());
     }
     
     @Path("count")
