@@ -159,9 +159,9 @@ public class CityInfoFacadeTest {
 
         Person expectedPerson = person2;
         CityInfo expectedCity = expectedPerson.getAddress().getCityInfo();
-        Long searchCityID = expectedCity.getId();
+        String searchCityZip = expectedCity.getZipCode();
 
-        PersonsDTO result = facade.getPersonsFromCity(searchCityID);
+        PersonsDTO result = facade.getPersonsFromCity(searchCityZip);
 
         int expectedResultSize = 1;
         assertEquals(expectedResultSize, result.getPersons().size());
@@ -176,8 +176,8 @@ public class CityInfoFacadeTest {
 
         CityInfo commonExpectedCity = person5.getAddress().getCityInfo();
         List<Person> expectedResult = new ArrayList(Arrays.asList(new Person[]{person4, person5, person6}));
-        Long searchCityId = commonExpectedCity.getId();
-        PersonsDTO result = facade.getPersonsFromCity(searchCityId);
+        String searchCityZip = commonExpectedCity.getZipCode();
+        PersonsDTO result = facade.getPersonsFromCity(searchCityZip);
 
         int expectedResultSize = expectedResult.size();
         assertEquals(expectedResultSize, result.getPersons().size());

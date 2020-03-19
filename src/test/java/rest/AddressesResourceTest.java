@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
 
-public class AddressResourceTest {
+public class AddressesResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
@@ -69,12 +69,12 @@ public class AddressResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        city1 = new CityInfo("3030", "Capital");
+        city1 = new CityInfo("2660", "Brøndby Strand");
         city2 = new CityInfo("3030", "Capital");
-        city3 = new CityInfo("3030", "Capital");
-        a1 = new Address("Home", city1);
-        a2 = new Address("Home", city2);
-        a3 = new Address("Home", city3);
+        city3 = new CityInfo("8210", "Aarhus");
+        a1 = new Address("Strandvejen", city1);
+        a2 = new Address("Jensensgade", city2);
+        a3 = new Address("Cahitsvej", city3);
         try {
             em.getTransaction().begin();
             em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();

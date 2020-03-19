@@ -8,8 +8,8 @@ import dto.PersonsDTO;
 import exceptions.InvalidInputException;
 import facades.CityInfoFacade;
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -48,8 +48,8 @@ public class CitiesResource {
     @Path("/{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getPersonsFromCity(@PathParam("id") Long id) {
-    PersonsDTO persons = FACADE.getPersonsFromCity(id);
+    public String getPersonsFromCity(@PathParam("id") String zip) {
+    PersonsDTO persons = FACADE.getPersonsFromCity(zip);
     return GSON.toJson(persons);
     }
     

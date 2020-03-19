@@ -7,7 +7,6 @@ import dto.HobbyDTO;
 import dto.PersonsDTO;
 import exceptions.InvalidInputException;
 import facades.HobbyFacade;
-import facades.PersonFacade;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;

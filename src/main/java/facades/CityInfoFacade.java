@@ -73,7 +73,7 @@ public class CityInfoFacade {
     }
 
     // Get a city by it's zip code
-    public CityInfoDTO getCityInfoByZipCode(CityInfoDTO zip) {
+    public CityInfoDTO getCityInfoByZipCode(String zip) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<CityInfo> tq = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode = :zipCode", CityInfo.class);
@@ -87,11 +87,11 @@ public class CityInfoFacade {
     }
 
     // Get all persons living in a given city
-    public PersonsDTO getPersonsFromCity(Long id) {
+    public PersonsDTO getPersonsFromCity(String zip) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.id = :id", Person.class);
-            tq.setParameter("id", id);
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.zipCode = :zipCode", Person.class);
+            tq.setParameter("zipCode", zip);
             List<Person> persons = tq.getResultList();
             PersonsDTO result = new PersonsDTO(persons);
             return result;
