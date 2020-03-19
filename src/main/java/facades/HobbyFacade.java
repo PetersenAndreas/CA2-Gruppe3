@@ -1,11 +1,12 @@
 package facades;
 
+import dto.HobbiesDTO;
 import dto.HobbyDTO;
-import dto.PersonDTO;
 import entities.Hobby;
-import entities.Person;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 public class HobbyFacade {
 
@@ -44,6 +45,18 @@ public class HobbyFacade {
             em.persist(hobby);
             em.getTransaction().commit();
             HobbyDTO result = new HobbyDTO(hobby);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public HobbiesDTO getAllHobbies(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Hobby> tq = em.createQuery("Select h from Hobby h", Hobby.class);
+            List<Hobby> dbList = tq.getResultList();
+            HobbiesDTO result = new HobbiesDTO(dbList);
             return result;
         } finally {
             em.close();

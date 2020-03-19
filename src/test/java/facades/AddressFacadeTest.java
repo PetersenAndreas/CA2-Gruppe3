@@ -62,11 +62,11 @@ public class AddressFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             city1 = new CityInfo("3030", "Capital");
-            city2 = new CityInfo("3030", "Capital");
-            city3 = new CityInfo("3030", "Capital");
+            city2 = new CityInfo("3020", "West City");
+            city3 = new CityInfo("3010", "East City");
             a1 = new Address("Home", city1);
-            a2 = new Address("Home", city2);
-            a3 = new Address("Home", city3);
+            a2 = new Address("Work", city2);
+            a3 = new Address("Vacation", city3);
             em.persist(city1);
             em.persist(city2);
             em.persist(city3);

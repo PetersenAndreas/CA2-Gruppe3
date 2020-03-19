@@ -68,7 +68,7 @@ public class CityInfoFacade {
         }
     }
 
-    public CityInfoDTO getCitiesInfoByZipCode(CityInfo zip) {
+    public CityInfoDTO getCitiesInfoByZipCode(String zip) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<CityInfo> tq = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode = :zipCode", CityInfo.class);
@@ -81,15 +81,15 @@ public class CityInfoFacade {
         }
     }
 
-    public PersonsDTO getPersonsFromCity(Long id) {
+    public PersonsDTO getPersonsFromCity(String zip) {
 
         EntityManager em = emf.createEntityManager();
 
         try {
 
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.id = :id",
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p JOIN p.address a WHERE a.cityInfo.zipCode = :zipCode",
                     Person.class);
-            tq.setParameter("id", id);
+            tq.setParameter("zipCode", zip);
             List<Person> persons = tq.getResultList();
             PersonsDTO result = new PersonsDTO(persons);
             return result;

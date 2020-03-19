@@ -2,12 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.PersonDTO;
 import dto.PersonsDTO;
-import entities.Hobby;
 import facades.HobbyFacade;
 import facades.PersonFacade;
-import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.ws.rs.Produces;
@@ -33,8 +30,8 @@ public class HobbiesResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String demo() {
-        return "{\"msg\":\"Hello World\"}";
+    public String getAllHobbies() {
+        return GSON.toJson(hobbyFacade.getAllHobbies());
     }
     
     @Path("count")

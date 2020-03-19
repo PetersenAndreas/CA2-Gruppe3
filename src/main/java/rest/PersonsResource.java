@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import dto.PersonsDTO;
-import entities.Person;
 import exceptions.InvalidInputException;
 import exceptions.NoResultFoundException;
 import utils.EMF_Creator;
@@ -18,7 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.junit.jupiter.api.Disabled;
 
 //@Disabled
 @Path("persons")
