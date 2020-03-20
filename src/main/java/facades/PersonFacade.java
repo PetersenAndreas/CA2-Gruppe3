@@ -37,6 +37,7 @@ public class PersonFacade {
         return emf.createEntityManager();
     }
 
+    // Get amount of persons in the database
     public long getPersonCount() {
         EntityManager em = getEntityManager();
         try {
@@ -46,29 +47,14 @@ public class PersonFacade {
             em.close();
         }
     }
-
-    // "Get all persons with a given hobby"
-    public PersonDTO getPersonsByHobby(Hobby hobby) {
+    
+    // Get all persons in database, with details
+    public PersonsDTO getAllPersons() {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.hobbies = :hobbies", Person.class);
-            tq.setParameter("hobbies", hobby);
-            Person person = tq.getSingleResult();
-            PersonDTO result = new PersonDTO(person);
-            return result;
-        } finally {
-            em.close();
-        }
-    }
-
-    // "Get all persons living in a given city (i.e. 2800 Lyngby)"
-    public PersonDTO getPersonsByCity(Address address) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.address = :address", Person.class);
-            tq.setParameter("address", address);
-            Person person = tq.getSingleResult();
-            PersonDTO result = new PersonDTO(person);
+            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
+            List<Person> dbList = query.getResultList();
+            PersonsDTO result = new PersonsDTO(dbList);
             return result;
         } finally {
             em.close();
@@ -112,19 +98,6 @@ public class PersonFacade {
         }
     }
 
-    //Get all persons
-    public PersonsDTO getAllPersons() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
-            List<Person> dbList = query.getResultList();
-            PersonsDTO result = new PersonsDTO(dbList);
-            return result;
-        } finally {
-            em.close();
-        }
-    }
-
     // Get person with a given ID
     public PersonDTO getPersonById(Long id) throws NoResultFoundException {
         EntityManager em = emf.createEntityManager();
@@ -141,6 +114,7 @@ public class PersonFacade {
         }
     }
 
+    // editing an already existing person, including their hobbies, phone etc
     public void editPerson(PersonDTO personDTO, Long id) throws InvalidInputException {
         validateInput(personDTO);
         editPersonAddress(id, personDTO);
@@ -267,6 +241,7 @@ public class PersonFacade {
         }
     }
 
+    // Ties a hobby to a person
     public void setHobby(PersonDTO personDTO, List<Hobby> allHobbies, Person person) {
         for (String hobby : personDTO.getHobbies()) {
             Hobby newHobby = null;
@@ -280,6 +255,7 @@ public class PersonFacade {
         }
     }
 
+    // Ties a street to a person
     public void setStreet(EntityManager em, PersonDTO personDTO, Person person) {
         Address address = em.createQuery("SELECT a From Address a WHERE a.street = :street", Address.class)
                 .setParameter("street", personDTO.getStreet())
@@ -287,6 +263,7 @@ public class PersonFacade {
         person.addAddressToPerson(address);
     }
 
+    // Validates the input for making or editing a person to ensure valid data
     private void validateInput(PersonDTO newPerson) throws InvalidInputException {
         //Variable firstName must NOT be null
         if (Objects.isNull(newPerson.getFirstName())) {

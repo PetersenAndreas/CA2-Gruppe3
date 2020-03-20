@@ -2,10 +2,8 @@ package facades;
 
 import dto.AddressDTO;
 import dto.AddressesDTO;
-import dto.PersonsDTO;
 import entities.Address;
 import entities.CityInfo;
-import entities.Person;
 import exceptions.InvalidInputException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -33,7 +31,7 @@ public class AddressFacade {
         return emf.createEntityManager();
     }
     
-    // Create an address
+    // Create an address with a related city
     public AddressDTO addAddress(AddressDTO addressDTO) throws InvalidInputException {
         EntityManager em = emf.createEntityManager();
         try {
@@ -56,6 +54,7 @@ public class AddressFacade {
         }
     }
 
+    // get amount of addresses in database
     public long getAddressCount() {
         EntityManager em = getEntityManager();
         try {
@@ -66,7 +65,7 @@ public class AddressFacade {
         }
     }
     
-    //Get all addresses
+    //Get all addresses in the database, with details
     public AddressesDTO getAllAddresses() {
         EntityManager em = emf.createEntityManager();
         try {

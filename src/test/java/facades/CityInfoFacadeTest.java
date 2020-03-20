@@ -8,6 +8,7 @@ import dto.PersonsDTO;
 import entities.Address;
 import entities.CityInfo;
 import entities.Person;
+import exceptions.InvalidInputException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +27,8 @@ import utils.EMF_Creator;
 public class CityInfoFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static CityInfoFacade facade;
-    private static PersonFacade facade2;
+    private static CityInfoFacade CITY_FACADE;
+    private static PersonFacade PERSON_FACADE;
     private static CityInfo city1, city2, city3, city4;
     private static Address address1, address2, address3, address4;
     private static Person person1, person2, person3, person4, person5, person6;
@@ -44,15 +45,15 @@ public class CityInfoFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.DROP_AND_CREATE);
-        facade = CityInfoFacade.getCityInfoFacade(emf);
-        facade2 = PersonFacade.getPersonFacade(emf);
+        CITY_FACADE = CityInfoFacade.getCityInfoFacade(emf);
+        PERSON_FACADE = PersonFacade.getPersonFacade(emf);
     }
 
     @BeforeAll
     public static void setUpClassV2() {
         emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
-        facade = CityInfoFacade.getCityInfoFacade(emf);
-        facade2 = PersonFacade.getPersonFacade(emf);
+        CITY_FACADE = CityInfoFacade.getCityInfoFacade(emf);
+        PERSON_FACADE = PersonFacade.getPersonFacade(emf);
     }
 
     @AfterAll
@@ -126,14 +127,14 @@ public class CityInfoFacadeTest {
 
     @Test
     public void testCityInfoFacade() {
-        long result = facade.getCityCount();
+        long result = CITY_FACADE.getCityCount();
         int expectedResult = cityArray.length;
         assertEquals(expectedResult, result);
     }
 
     @Test
     public void testGetAllCities() {
-        CitiesInfoDTO result = facade.getAllCityInfoes();
+        CitiesInfoDTO result = CITY_FACADE.getAllCityInfo();
 
         int expectedResultSize = cityArray.length;
         assertEquals(expectedResultSize, result.getCitiesInfo().size());
@@ -153,6 +154,24 @@ public class CityInfoFacadeTest {
             assertTrue(matchFound);
         }
     }
+    
+    @Test
+    public void testAddCityInfo() throws InvalidInputException {
+        CityInfoDTO testCity = new CityInfoDTO ("3000", "Odense");
+        CityInfoDTO result = CITY_FACADE.addCityInfo(testCity);
+        assertEquals(testCity.getZipCode(), result.getZipCode());
+        assertEquals(testCity.getCityName(), result.getCityName());
+        
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<CityInfo> dbResult = em.createQuery("Select c FROM CityInfo c", CityInfo.class).getResultList();
+            assertEquals(dbResult.size(), cityArray.length + 1);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
 
     @Test
     public void testGetPersonsFromCityWhereThereIsOnlyOneMatch() {
@@ -161,7 +180,7 @@ public class CityInfoFacadeTest {
         CityInfo expectedCity = expectedPerson.getAddress().getCityInfo();
         String searchCityZip = expectedCity.getZipCode();
 
-        PersonsDTO result = facade.getPersonsFromCity(searchCityZip);
+        PersonsDTO result = CITY_FACADE.getPersonsFromCity(searchCityZip);
 
         int expectedResultSize = 1;
         assertEquals(expectedResultSize, result.getPersons().size());
@@ -177,7 +196,7 @@ public class CityInfoFacadeTest {
         CityInfo commonExpectedCity = person5.getAddress().getCityInfo();
         List<Person> expectedResult = new ArrayList(Arrays.asList(new Person[]{person4, person5, person6}));
         String searchCityZip = commonExpectedCity.getZipCode();
-        PersonsDTO result = facade.getPersonsFromCity(searchCityZip);
+        PersonsDTO result = CITY_FACADE.getPersonsFromCity(searchCityZip);
 
         int expectedResultSize = expectedResult.size();
         assertEquals(expectedResultSize, result.getPersons().size());
@@ -197,7 +216,14 @@ public class CityInfoFacadeTest {
             }
             assertTrue(foundMatch);
         }
-
     }
-
+    
+    @Test
+    public void testGetCityInfoByZipCode() {
+        String zip = "2800";
+        CityInfoDTO result = CITY_FACADE.getCityInfoByZipCode(zip);
+        
+        assertEquals(result.getZipCode(), city2.getZipCode());
+        assertEquals(result.getCityName(), city2.getCity());
+    }
 }

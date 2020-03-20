@@ -36,7 +36,7 @@ public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Person r1, r2;
+    private static Person p1, p2;
     private static Address a1;
     private static CityInfo city1;
     private static List<Person> personList = new ArrayList();
@@ -72,18 +72,18 @@ public class PersonResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new Person("Hans Hansen", "hans@hansen.dk", "55555555");
-        r2 = new Person("Kurt Kurtsen", "kurt@kurtsen.com", "44444444");
+        p1 = new Person("Hans Hansen", "hans@hansen.dk", "55555555");
+        p2 = new Person("Kurt Kurtsen", "kurt@kurtsen.com", "44444444");
         city1 = new CityInfo("3030", "Capital");
         a1 = new Address("Home", city1);
         personList.clear();
-        personList.add(r1);
-        personList.add(r2);
+        personList.add(p1);
+        personList.add(p2);
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
+            em.persist(p1);
+            em.persist(p2);
             em.persist(city1);
             em.getTransaction().commit();
         } finally {
@@ -168,7 +168,7 @@ public class PersonResourceTest {
 
     @Test
     public void testPersonOnId() throws Exception {
-        int id = Math.toIntExact(r1.getId());
+        int id = Math.toIntExact(p1.getId());
         given()
                 .contentType("application/json")
                 .get("/persons/" + id).then()
@@ -180,10 +180,10 @@ public class PersonResourceTest {
     @Test
     public void testPersonEdit() throws Exception {
 
-        Person expectedPerson = r1;
+        Person expectedPerson = p1;
         Address expectedAddress = a1;
         String id = Long.toString(expectedPerson.getId());
-        PersonDTO expectedResult = new PersonDTO(r1);
+        PersonDTO expectedResult = new PersonDTO(p1);
         expectedResult.setFirstName("Nicolaj");
         expectedResult.setLastName("Jackson");
         expectedResult.setEmail("NJ@Gmail.com");
