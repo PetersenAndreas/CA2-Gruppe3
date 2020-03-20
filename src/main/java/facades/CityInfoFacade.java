@@ -36,7 +36,7 @@ public class CityInfoFacade {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            CityInfo newCity = new CityInfo(cityDTO.getCityName(), cityDTO.getZipCode());
+            CityInfo newCity = new CityInfo(cityDTO.getZipCode(), cityDTO.getCityName());
             em.persist(newCity);
             em.getTransaction().commit();
             CityInfoDTO result = new CityInfoDTO(newCity);
@@ -58,7 +58,7 @@ public class CityInfoFacade {
     }
 
     // Get all the cities in the database, with details
-    public CitiesInfoDTO getAllCityInfoes() {
+    public CitiesInfoDTO getAllCityInfo() {
 
         EntityManager em = emf.createEntityManager();
 

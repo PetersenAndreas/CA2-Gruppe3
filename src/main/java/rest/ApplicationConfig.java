@@ -27,5 +27,4 @@ public class ApplicationConfig extends Application {
         resources.add(rest.PersonsResource.class);
         resources.add(rest.PhonesResource.class);
     }
-
 }

@@ -3,6 +3,7 @@ package facades;
 import dto.HobbyDTO;
 import entities.Hobby;
 import exceptions.InvalidInputException;
+import java.util.List;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,11 +106,19 @@ public class HobbyFacadeTest {
     
     @Test
     public void testAddHobby() throws InvalidInputException {
-        Hobby testHobby = new Hobby("Video games", "Spending time wisely");
-        Long expectedId = highestID + 1;
-        HobbyDTO testHobbyDTO = new HobbyDTO(testHobby);
-        HobbyDTO result = facade.addHobby(testHobbyDTO);
-//        assertEquals(expectedId, testHobby.getId());
-//        assertTrue(result.getName().equals(testHobby.getName()));
+        HobbyDTO testHobby = new HobbyDTO("Video games", "Spending time wisely");
+        HobbyDTO result = facade.addHobby(testHobby);
+        assertEquals(result.getName(), testHobby.getName());
+        assertEquals(result.getDescription(), testHobby.getDescription());
+        
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<Hobby> dbResult = em.createQuery("Select h FROM Hobby h", Hobby.class).getResultList();
+            assertEquals(dbResult.size(), hobbyArray.length + 1);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        } finally {
+            em.close();
+        }
     }
 }

@@ -30,6 +30,21 @@ public class HobbyFacade {
         return emf.createEntityManager();
     }
     
+    // Create a hobby
+    public HobbyDTO addHobby(HobbyDTO hobbyDTO) throws InvalidInputException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Hobby newHobby = new Hobby(hobbyDTO.getName(), hobbyDTO.getDescription());
+            em.persist(newHobby);
+            em.getTransaction().commit();
+            HobbyDTO result = new HobbyDTO(newHobby);
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+    
     // Get amount of hobbies in database
     public long getHobbyCount(){
         EntityManager em = getEntityManager();
@@ -41,7 +56,7 @@ public class HobbyFacade {
         }
     }
     
-    // Get all hobbies
+    // Get all hobbies in database, with details
     public HobbiesDTO getAllHobbies() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -54,22 +69,7 @@ public class HobbyFacade {
         }
     }
     
-    // Create a hobby
-    public HobbyDTO addHobby(HobbyDTO hobbyDTO) throws InvalidInputException {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            Hobby newHobby = new Hobby(hobbyDTO.getDescription(), hobbyDTO.getName());
-            em.persist(newHobby);
-            em.getTransaction().commit();
-            HobbyDTO result = new HobbyDTO(newHobby);
-            return result;
-        } finally {
-            em.close();
-        }
-    }
-    
-        // Get the count of people with a given hobby
+    // Get the count of people with a given hobby
     public long getPersonCountByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
         try{
@@ -80,7 +80,7 @@ public class HobbyFacade {
         }
     }
     
-    // "Get all persons with a given hobby"
+    // Get all persons with a given hobby
     public PersonsDTO getPersonsByHobby(String hobby) {
         EntityManager em = emf.createEntityManager();
         try {
