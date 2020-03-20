@@ -11,37 +11,49 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        
-        
-      <div align="center">
-        
-          
-           
+
+
+        <div align="center">
+
+
+
             <input id="personID" type="text" name="idNumber" value="" placeholder="Enter ID"/><br>
-             <input id="firstName" type="text" name="idNumber" value="" placeholder="Enter firstName"/><br>
-             <input id="lastName" type="text" name="idNumber" value="" placeholder="Enter lastName"/><br>
-             <input id="email" type="text" name="idNumber" value="" placeholder="Enter email"/><br>
-             <input id="street" type="text" name="idNumber" value="" placeholder="Enter street"/><br>
-             <input id="cityName" type="text" name="idNumber" value="" placeholder="Enter cityName"/><br>
-             <input id="zip" type="text" name="idNumber" value="" placeholder="Enter zipCode"/><br>
-             <input id="hobbies1" type="text" name="idNumber" value="" placeholder="Enter hobbies"/><br>
-             <input id="hobbies2" type="text" name="idNumber" value="" placeholder="Enter hobbies"/><br>
-             <input id="phoneNumber1" type="text" name="idNumber" value="" placeholder="Enter phone"/><br>
-             <input id="phoneNumber2" type="text" name="idNumber" value="" placeholder="Enter phone"/><br>
-             <input id="description" type="text" name="idNumber" value="" placeholder="Enter description"/>
+            <input id="firstName" type="text" name="idNumber" value="" placeholder="Enter firstName"/><br>
+            <input id="lastName" type="text" name="idNumber" value="" placeholder="Enter lastName"/><br>
+            <input id="email" type="text" name="idNumber" value="" placeholder="Enter email"/><br>
+            <button id="edit_hobby">Add Hobby</button>
+
+            <select  name="Hobbies" id="inputHobbiesE">
+              
+
+            </select><br>
+
+            <p id="hobby_list"></p><br>
             
-            
-             <br><br>
-             
-             <input id="edit_person" type="submit" value="EditPerson" />
-            
+            <button id="add_phone">Add Phone</button><br>
+
+            <input id="phone" type="text" name="phone" value="" placeholder="enter phone" />
+            <input id="description" type="text" name="idNumber" value="" placeholder="Enter description"/><br>
+
+
+            <select name="Street" id="inputStreetE">
+                <option>Johansensgade</option>
+                <option>Test 2</option>
+            </select>
+
+
+
+            <br><br>
+
+            <input id="edit_person" type="submit" value="EditPerson" />
+
             <br><br>
             <div id="table_get_all"></div>
-          
-          </div>
-          
+
+        </div>
+
         <script src="editPerson.js"></script>
-        
-        
+
+
     </body>
 </html>
