@@ -65,6 +65,7 @@ function editPerson(evt){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            "id": id,
             "firstName": firstName,
             "lastName": lastName,
             "email": email,
