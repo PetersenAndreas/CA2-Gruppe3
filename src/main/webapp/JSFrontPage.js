@@ -32,6 +32,7 @@ document.getElementById("rldAllBtn").addEventListener("click", reloadeUsers);
 document.getElementById("addHobby").addEventListener("click", addHobby);
 document.getElementById("addPhone").addEventListener("click", addPhone);
 
+
 function fetchAllPersons() {
     let url = "api/persons/";
     let header = "<tr>" + "<th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone(s)</th><th>Description</th><th>Hobby</th><th>City</th><th>Street</th><th>Zip</th>" + "</tr>";
@@ -60,7 +61,6 @@ function insertIntoTableFooters(data) {
                 + "</tr>";
         htmlRows += temp;
     });
-    console.log(htmlRows);
     return htmlRows;
 }
 ;
@@ -96,7 +96,7 @@ function addPhone() {
         description: document.getElementById("inputPhoneDesC").value};
     newPhones.push(phone);
     console.log(newPhones);
-    document.getElementById("addedPhones").innerHTML = newPhones.map(x=>x.number + ", " + x.description).join("<br>");
+    document.getElementById("addedPhones").innerHTML = newPhones.map(x => x.number + ", " + x.description).join("<br>");
     document.getElementById("inputPhoneNrC").value = "";
     document.getElementById("inputPhoneDesC").value = "";
 }
@@ -106,8 +106,8 @@ function addHobby() {
     newHobbies.push(hobby);
     console.log(newHobbies);
     document.getElementById("addedHobbies").innerHTML = newHobbies.join("<br>");
-    
-    
+
+
 }
 
 function createPerson() {
@@ -115,7 +115,7 @@ function createPerson() {
     let lastName = document.getElementById("inputLastNameC").value;
     let email = document.getElementById("inputEmailC").value;
 
-    
+
     let street = document.getElementById("inputStreetC").value;
     let options = {
         method: "POST",
@@ -138,7 +138,7 @@ function createPerson() {
                 console.log("data", data);
             });
     newPhones = [];
-    document.getElementById("addedPhones").innerHTML = newPhones.map(x=>x.number + ", " + x.description).join("<br>");
+    document.getElementById("addedPhones").innerHTML = newPhones.map(x => x.number + ", " + x.description).join("<br>");
     newHobbies = [];
     document.getElementById("addedHobbies").innerHTML = newHobbies.join("<br>");
 }
@@ -150,7 +150,8 @@ function fetchHobbies() {
             .then(res => res.json())
             .then(data => {
                 console.log("data", data);
-                document.getElementById("inputHobbiesC").innerHTML = "<option>" + data.hobbies.map(x=>x.name).join("</option><option>") + "</option>";
+                document.getElementById("inputHobbiesC").innerHTML = "<option>" + data.hobbies.map(x => x.name).join("</option><option>") + "</option>";
+                document.getElementById("inputHobbiesE").innerHTML = "<option>" + data.hobbies.map(x => x.name).join("</option><option>") + "</option>";
             });
 }
 
@@ -160,10 +161,82 @@ function fetchStreet() {
             .then(res => res.json())
             .then(data => {
                 console.log("data", data);
-                document.getElementById("inputStreetC").innerHTML = "<option>" + data.addressList.map(x=>x.street).join("</option><option>") + "</option>";
+                document.getElementById("inputStreetC").innerHTML = "<option>" + data.addressList.map(x => x.street).join("</option><option>") + "</option>";
+                document.getElementById("inputStreetE").innerHTML = "<option>" + data.addressList.map(x => x.street).join("</option><option>") + "</option>";
             });
 }
 
+//Edit functions:
+
+let editHobbies = [];
+let editPhones = [];
+
+document.getElementById("edit_person").addEventListener("click", editPerson);
+
+function editPerson() {
+
+    let id = document.getElementById("personID").value;
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let email = document.getElementById("email").value;
+    let street = document.getElementById("inputStreetE").value;
+    let hobbies1 = editHobbies;
+
+    let options = {
+        method: "PUT",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "id": id,
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "street": street,
+            "hobbies": hobbies1,
+            phones: {phones: editPhones}})
+    };
+
+    fetch("api/persons/edit/" + id, options)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status) {
+                    console.log(data.msg);
+                    //document.getElementById("errorEdit").innerHTML = data.msg;
+                } else {
+                    //  document.getElementById("errorEdit").innerHTML = '<br>';
+                    console.log("nope");
+                }
+            });
+    editHobbies = [];
+    document.getElementById("hobby_list").innerHTML = editHobbies.join("<br>");
+    editPhones = [];
+    document.getElementById("editPhones").innerHTML = newPhones.map(x => x.number + ", " + x.description).join("<br>");
+}
+;
+
+
+function editHobbiesB() {
+
+    editHobbies.push(document.getElementById("inputHobbiesE").value);
+    console.log(editHobbies);
+    document.getElementById("hobby_list").innerHTML = editHobbies.join("<br>");
+
+}
+document.getElementById("edit_hobby").addEventListener("click", editHobbiesB);
+
+function editPhone() {
+    let phone = {
+        number: document.getElementById("inputPhoneE").value,
+        description: document.getElementById("inputPhoneDesE").value};
+    editPhones.push(phone);
+    console.log(editPhones);
+    document.getElementById("editPhones").innerHTML = editPhones.map(x => x.number + ", " + x.description).join("<br>");
+    document.getElementById("inputPhoneE").value = "";
+    document.getElementById("inputPhoneDesE").value = "";
+}
+document.getElementById("edit_phone").addEventListener("click", editPhone);
 
 
 

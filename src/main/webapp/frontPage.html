@@ -20,6 +20,7 @@ and open the template in the editor.
             <button id="searchIdBtn">Search Person on Id</button>
             <button id="rldAllBtn">Reloade table</button>
             <button id="createSelection" data-toggle="modal" data-target="#myModalCreate">Create Person</button>
+            <button id="createSelection" data-toggle="modal" data-target="#myModalEdit">Edit Person</button>
             <p id="error"><br></p>
             <div id="myDiv"></div>
         </div>
@@ -37,19 +38,19 @@ and open the template in the editor.
                     </div>
                     <div class="modal-body">
                         <p>First Name:</p>
-                        <input type="text" name="firstName" value="" id="inputFirstNameC"/>
+                        <input type="text" name="firstName" value="" id="inputFirstNameC" style="width: 200px"/>
                         <p>Last Name:</p>
-                        <input type="text" name="lastName" value="" id="inputLastNameC"/>
+                        <input type="text" name="lastName" value="" id="inputLastNameC" style="width: 200px"/>
                         <p>Email:</p>
-                        <input type="text" name="email" value="" id="inputEmailC"/>
+                        <input type="text" name="email" value="" id="inputEmailC" style="width: 200px"/>
                         <p>Phone(s):    <button id="addPhone">Add Phone</button></p> 
-                        <input type="text" name="phone" value="" id="inputPhoneNrC"/> Number
+                        <input type="text" name="phone" value="" id="inputPhoneNrC" style="width: 200px"/> Number
                         <br>
-                        <input type="text" name="phoneDes" value="" id="inputPhoneDesC"/> Description
+                        <input type="text" name="phoneDes" value="" id="inputPhoneDesC" style="width: 200px"/> Description
                         <p id="addedPhones"></p>
                         <p>Hobbies:     <button id="addHobby">Add Hobby</button></p>
                         <div id="drpDwnHobbies">
-                            <select name="Hobbies" id="inputHobbiesC">
+                            <select name="Hobbies" id="inputHobbiesC" style="width: 200px">
                                 <option>MMA</option>
                                 <option>Test 2</option>
                             </select>
@@ -57,7 +58,7 @@ and open the template in the editor.
                         <p id="addedHobbies"></p>
                         <p>Street:</p>
                         <div id="drpDwnStreet">
-                            <select name="Street" id="inputStreetC">
+                            <select name="Street" id="inputStreetC" style="width: 200px">
                                 <option>Johansensgade</option>
                                 <option>Test 2</option>
                             </select>
@@ -69,7 +70,51 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModalEdit" role="dialog">
+            <div class="modal-dialog">
 
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Person</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Enter the ID of the person you want to edit:</p>
+                        <input id="personID" type="text" name="idNumber" value="" style="width: 40px"/>
+                        <p>Edit First Name:</p>
+                        <input id="firstName" type="text" name="idNumber" value="" style="width: 200px"/>
+                        <p>Edit Last Name:</p>
+                        <input id="lastName" type="text" name="idNumber" value="" style="width: 200px"/>
+                        <p>Edit Email:</p>
+                        <input id="email" type="text" name="idNumber" value="" style="width: 200px"/>
+                        <p>Edit Phone(s):    <button id="edit_phone">Add Phone</button></p> 
+                        <input id="inputPhoneE" type="text" name="phone" value="" style="width: 200px"/> Number
+                        <br>
+                        <input id="inputPhoneDesE" type="text" name="idNumber" value="" style="width: 200px"/> Description
+                        <p id="editPhones"></p>
+
+                        <p>Hobbies:     <button id="edit_hobby">Add Hobby</button></p>
+
+                        <select  name="Hobbies" id="inputHobbiesE" style="width: 200px">
+                        </select><br>
+                        <p id="hobby_list"></p>
+                        <p id="addedHobbies"></p>
+                        <p>Street:</p>
+                        <div id="drpDwnStreet">
+                            <select name="Street" id="inputStreetE" style="width: 200px">
+                            </select>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="edit_person">Edit Person</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <script src="JSFrontPage.js"></script>
