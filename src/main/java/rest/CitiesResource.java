@@ -8,6 +8,7 @@ import dto.PersonsDTO;
 import exceptions.InvalidInputException;
 import facades.CityInfoFacade;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -33,7 +34,7 @@ public class CitiesResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllCities() {
-        CitiesInfoDTO cities = FACADE.getAllCityInfoes();
+        CitiesInfoDTO cities = FACADE.getAllCityInfo();
         return GSON.toJson(cities);
     }
     
@@ -49,8 +50,20 @@ public class CitiesResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPersonsFromCity(@PathParam("id") String zip) {
-    PersonsDTO persons = FACADE.getPersonsFromCity(zip);
-    return GSON.toJson(persons);
+        PersonsDTO persons = FACADE.getPersonsFromCity(zip);
+        return GSON.toJson(persons);
+    }
+    
+    @Path("/city/{zip}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getCityInfoByZipCode(@PathParam("zip") String zip) {
+        try {
+        CityInfoDTO city = FACADE.getCityInfoByZipCode(zip);
+        return GSON.toJson(city);
+        } catch (NoResultException ex) {
+            return GSON.toJson(null);
+        }
     }
     
     @Path("/add")

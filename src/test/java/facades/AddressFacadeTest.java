@@ -5,6 +5,7 @@ import dto.CityInfoDTO;
 import entities.Address;
 import entities.CityInfo;
 import exceptions.InvalidInputException;
+import java.util.List;
 import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -108,15 +109,15 @@ public class AddressFacadeTest {
         assertEquals(testCity.getZipCode(), result.getCityInfo().getZipCode());
         assertEquals(testCity.getCityName(), result.getCityInfo().getCityName());
         assertEquals(testAddress.getStreet(), result.getStreet());
-        // TODO - TEST DATABASE
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            Address dbResult = em.createQuery("Select a FROM Address a", Address.class);
-//            dbResult.
-//        } catch (Exception e) {
-//            fail(e.getMessage());
-//        } finally {
-//            em.close();
-//        }
+        
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<Address> dbResult = em.createQuery("Select a FROM Address a", Address.class).getResultList();
+            assertEquals(dbResult.size(), addressArray.length + 1);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        } finally {
+            em.close();
+        }
     }
 }

@@ -1,7 +1,6 @@
 package rest;
 
-import entities.Address;
-import entities.CityInfo;
+import entities.Phone;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -21,13 +20,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AddressesResourceTest {
+public class PhonesResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Address a1, a2, a3;
-    private static CityInfo city1, city2, city3;
-    private static Address[] addressArray;
+    private static Phone p1, p2, p3;
+    private static Phone[] phoneArray;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -59,27 +57,20 @@ public class AddressesResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        city1 = new CityInfo("2660", "Brondby Strand");
-        city2 = new CityInfo("3030", "Capital");
-        city3 = new CityInfo("8210", "Aarhus");
-        a1 = new Address("Strandvejen", city1);
-        a2 = new Address("Jensensgade", city2);
-        a3 = new Address("Cahitsvej", city3);
+        p1 = new Phone("58719251", "Home");
+        p2 = new Phone("01579125", "Work");
+        p3 = new Phone("78519251", "Cell");
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("CityInfo.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Address.deleteAllRows").executeUpdate();
-            em.persist(city1);
-            em.persist(city2);
-            em.persist(city3);
-            em.persist(a1);
-            em.persist(a2);
-            em.persist(a3);
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
+            em.persist(p1);
+            em.persist(p2);
+            em.persist(p3);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-        addressArray = new Address[]{a1, a2, a3};
+        phoneArray = new Phone[]{p1, p2, p3};
     }
 
      private static void emptyDatabase() {
@@ -105,16 +96,16 @@ public class AddressesResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/addresses").then().statusCode(200);
+        given().when().get("/phones").then().statusCode(200);
     }
 
     @Test
     public void testAddressCount() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/addresses/count").then()
+                .get("/phones/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(addressArray.length));
+                .body("count", equalTo(phoneArray.length));
     }
 }

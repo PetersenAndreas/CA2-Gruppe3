@@ -29,13 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static rest.PersonResourceTest.startServer;
 import utils.EMF_Creator;
 
-/**
- *
- * @author cahit
- */
 public class CitiesResourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -196,5 +191,4 @@ public class CitiesResourceTest {
             assertTrue(matchingIDFound);
         }
     }
-
 }
