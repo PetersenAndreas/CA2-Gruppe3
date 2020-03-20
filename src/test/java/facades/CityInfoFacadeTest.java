@@ -220,7 +220,7 @@ public class CityInfoFacadeTest {
     
     @Test
     public void testGetCityInfoByZipCode() {
-        String zip = "2800";
+        String zip = city2.getZipCode();
         CityInfoDTO result = CITY_FACADE.getCityInfoByZipCode(zip);
         
         assertEquals(result.getZipCode(), city2.getZipCode());
