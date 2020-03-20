@@ -73,7 +73,7 @@ function editPerson(evt){
             "zip": zip
             
         })
-    }
+    };
 
     fetch("http://localhost:8080/CA2-Gruppe3/api/persons/edit/" + id, options)
         .then(res => res.json())
