@@ -9,16 +9,69 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <input type="text" name="searchIdPer" value="" id="searchIdPer" style="width: 40px" placeholder="ID..."/>
-        <button id="searchIdBtn">Search Person on Id</button>
-        <button id="rldAllBtn">Reloade table</button>
-        <button id="createSelection">Create Person</button>
-        <p id="error"><br></p>
-        <div id="myDiv"></div>
-        
-        
+        <div style="margin-left: 50px; margin-top: 25px">
+            <h3>Gruppe 3 - Krak Program</h3>    
+            <input type="text" name="searchIdPer" value="" id="searchIdPer" style="width: 40px" placeholder="ID..."/>
+            <button id="searchIdBtn">Search Person on Id</button>
+            <button id="rldAllBtn">Reloade table</button>
+            <button id="createSelection" data-toggle="modal" data-target="#myModalCreate">Create Person</button>
+            <p id="error"><br></p>
+            <div id="myDiv"></div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModalCreate" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Create Person</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>First Name:</p>
+                        <input type="text" name="firstName" value="" id="inputFirstNameC"/>
+                        <p>Last Name:</p>
+                        <input type="text" name="lastName" value="" id="inputLastNameC"/>
+                        <p>Email:</p>
+                        <input type="text" name="email" value="" id="inputEmailC"/>
+                        <p>Phone(s):    <button id="addPhone">Add Phone</button></p> 
+                        <input type="text" name="phone" value="" id="inputPhoneNrC"/> Number
+                        <br>
+                        <input type="text" name="phoneDes" value="" id="inputPhoneDesC"/> Description
+                        <p id="addedPhones"></p>
+                        <p>Hobbies:     <button id="addHobby">Add Hobby</button></p>
+                        <div id="drpDwnHobbies">
+                            <select name="Hobbies" id="inputHobbiesC">
+                                <option>MMA</option>
+                                <option>Test 2</option>
+                            </select>
+                        </div>
+                        <p id="addedHobbies"></p>
+                        <p>Street:</p>
+                        <div id="drpDwnStreet">
+                            <select name="Street" id="inputStreetC">
+                                <option>Johansensgade</option>
+                                <option>Test 2</option>
+                            </select>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="createPersonBtn">Create Person</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <script src="JSFrontPage.js"></script>
     </body>
 </html>
