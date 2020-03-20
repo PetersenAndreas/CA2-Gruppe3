@@ -52,11 +52,11 @@ function editPerson(evt){
     let street = document.getElementById("street").value;
     let cityName = document.getElementById("cityName").value;
     let zip = document.getElementById("zip").value;
-//    let hobbies1 = document.getElementById("hobbies1").value;
-//    let hobbies2 = document.getElementById("hobbies2").value;
-//    let phoneNumber1 = document.getElementById("phoneNumber1").value;
-//    let phoneNumber2 = document.getElementById("phoneNumber2").value;
-//    let description = document.getElementById("description").value;
+    let hobbies1 = document.getElementById("hobbies1").value;
+    let hobbies2 = document.getElementById("hobbies2").value;
+    let phoneNumber1 = document.getElementById("phoneNumber1").value;
+    let phoneNumber2 = document.getElementById("phoneNumber2").value;
+    let description = document.getElementById("description").value;
 
     let options = {
         method: "PUT",
@@ -71,7 +71,12 @@ function editPerson(evt){
             "email": email,
             "street": street,
             "cityName": cityName,
-            "zip": zip
+            "zip": zip,
+            "hobbies": [hobbies1],
+            "phones": {"phones":[
+                    {"number":phoneNumber1,
+                     "description": description}
+            ]}
             
         })
     };
@@ -81,7 +86,7 @@ function editPerson(evt){
         .then(data => {
             if (data.status) {
                 console.log(data.msg);
-                document.getElementById("errorEdit").innerHTML = data.msg;
+                //document.getElementById("errorEdit").innerHTML = data.msg;
             } else {
               //  document.getElementById("errorEdit").innerHTML = '<br>';
               console.log("nope");
