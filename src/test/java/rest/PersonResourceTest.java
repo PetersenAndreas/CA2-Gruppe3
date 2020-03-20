@@ -187,7 +187,7 @@ public class PersonResourceTest {
         expectedResult.setFirstName("Nicolaj");
         expectedResult.setLastName("Jackson");
         expectedResult.setEmail("NJ@Gmail.com");
-        expectedResult.setStreet(a1.getStreet());
+        expectedResult.setStreet(expectedAddress.getStreet());
 
         given()
                 .contentType("application/json").body(expectedResult)
