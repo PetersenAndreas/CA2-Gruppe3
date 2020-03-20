@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+let editHobbies = [];
+let editPhones = [];
+
 getAllPersons();
 
 function getAllPersons() {
@@ -49,13 +52,9 @@ function editPerson(evt){
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("email").value;
-    let street = document.getElementById("street").value;
-    let cityName = document.getElementById("cityName").value;
-    let zip = document.getElementById("zip").value;
-    let hobbies1 = document.getElementById("hobbies1").value;
-    let hobbies2 = document.getElementById("hobbies2").value;
-    let phoneNumber1 = document.getElementById("phoneNumber1").value;
-    let phoneNumber2 = document.getElementById("phoneNumber2").value;
+    let street = document.getElementById("inputStreetE").value;
+    let hobbies1 = editHobbies;
+    let phoneNumber1 = document.getElementById("phone").value;
     let description = document.getElementById("description").value;
 
     let options = {
@@ -70,9 +69,7 @@ function editPerson(evt){
             "lastName": lastName,
             "email": email,
             "street": street,
-            "cityName": cityName,
-            "zip": zip,
-            "hobbies": [hobbies1],
+            "hobbies": hobbies1,
             "phones": {"phones":[
                     {"number":phoneNumber1,
                      "description": description}
@@ -92,9 +89,45 @@ function editPerson(evt){
               console.log("nope");
             }
         });
-
+editHobbies = [];
+document.getElementById("hobby_list").innerHTML = editHobbies.join("<br>");
     getAllPersons();
 
 };
     
   
+ getHobbyList();
+function getHobbyList(){
+    
+     let url = "api/hobbies/";
+    fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                console.log("data", data);
+                document.getElementById("inputHobbiesE").innerHTML = "<option>" + data.hobbies.map(x=>x.name).join("</option><option>") + "</option>";
+            });
+    
+}
+
+getAddressList();
+function getAddressList(){
+    
+   let url = "api/addresses/";
+    fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                console.log("data", data);
+                document.getElementById("inputStreetE").innerHTML = "<option>" + data.addressList.map(x=>x.street).join("</option><option>") + "</option>";
+            });
+}
+
+
+document.getElementById("edit_hobby").addEventListener("click",editHobbiesB);
+
+function editHobbiesB(){
+   
+ editHobbies.push(document.getElementById("inputHobbiesE").value);
+ console.log(editHobbies);
+ document.getElementById("hobby_list").innerHTML = editHobbies.join("<br>");
+    
+}
