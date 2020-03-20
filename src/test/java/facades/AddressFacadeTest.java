@@ -1,6 +1,7 @@
 package facades;
 
 import dto.AddressDTO;
+import dto.AddressesDTO;
 import dto.CityInfoDTO;
 import entities.Address;
 import entities.CityInfo;
@@ -12,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,6 +101,28 @@ public class AddressFacadeTest {
         long result = FACADE.getAddressCount();
         int expectedResult = addressArray.length;
         assertEquals(expectedResult, result);
+    }
+    
+    @Test
+    public void testGetAllAddresses() {
+        AddressesDTO result = FACADE.getAllAddresses();
+        int expectedResult = addressArray.length;
+        assertEquals(expectedResult, result.getAddresses().size());
+        
+        for (AddressDTO addressDTO : result.getAddresses()) {
+            String street = addressDTO.getStreet();
+            CityInfoDTO city = addressDTO.getCityInfo();
+            boolean matchFound = false;
+            for (Address address : addressArray) {
+                boolean matchingStreet = street.equals(address.getStreet());
+                boolean matchingCity = city.getZipCode().equals(address.getCityInfo().getZipCode());
+                if (matchingStreet && matchingCity) {
+                    matchFound = true;
+                    break;
+                }
+            }
+            assertTrue(matchFound);
+        }
     }
 
     @Test

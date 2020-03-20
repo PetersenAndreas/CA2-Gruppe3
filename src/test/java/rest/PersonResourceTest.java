@@ -139,7 +139,7 @@ public class PersonResourceTest {
                 .get("/persons/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(2));
+                .body("count", equalTo(personList.size()));
     }
 
     @Test
@@ -214,17 +214,14 @@ public class PersonResourceTest {
         } finally {
             em.close();
         }
-
     }
     
     @Test
     public void testAddPerson() throws Exception{
-        
         Person newPerson = new Person("Jens Jensen", "jens@jensen.dk", "11111111");
         Address expectedAddress = a1;
         newPerson.addAddressToPerson(expectedAddress);
         PersonDTO pDTO = new PersonDTO(newPerson);
-        
         given()
                 .contentType("application/json").body(pDTO)
                 .when().post("/persons/add/")
@@ -249,7 +246,5 @@ public class PersonResourceTest {
         } finally {
             em.close();
         }
-
-        
     }
 }

@@ -1,5 +1,7 @@
 package rest;
 
+import dto.HobbiesDTO;
+import dto.HobbyDTO;
 import dto.PersonDTO;
 import dto.PersonsDTO;
 import entities.Hobby;
@@ -21,8 +23,10 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +40,7 @@ public class HobbiesResourceTest {
     private static Hobby h1,h2;
     private static Person p1,p2;
     private static List<Person> personList = new ArrayList();
+    private static List<Hobby> hobbyList = new ArrayList();
     
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -73,8 +78,12 @@ public class HobbiesResourceTest {
         p2 = new Person("Bruno", "Fernandes", "United@gmail.com");
         p1.addHobbyToPerson(h1);
         p2.addHobbyToPerson(h2);
+        personList.clear();
         personList.add(p1);
         personList.add(p2);
+        hobbyList.clear();
+        hobbyList.add(h1);
+        hobbyList.add(h2);
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
@@ -106,20 +115,71 @@ public class HobbiesResourceTest {
     }
     
     @Test
+    public void testGetAllHobbies() throws Exception {
+        HobbiesDTO dbList = given()
+                .contentType("application/json")
+                .get("/hobbies/").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .extract().body().as(HobbiesDTO.class);
+
+        for (Hobby hobby : hobbyList) {
+            boolean matchingIdFound = false;
+            for (HobbyDTO dbHobby : dbList.getHobbies()) {
+                if (Objects.equals(hobby.getName(), dbHobby.getName())) {
+                    assertTrue(dbHobby.getDescription().equals(hobby.getDescription()));
+                    assertTrue(dbHobby.getName().equals(hobby.getName()));
+                    matchingIdFound = true;
+                    break;
+                }
+            }
+            assertTrue(matchingIdFound);
+        }
+    }
+    
+    @Test 
+    public void testAddHobby() throws Exception {
+        Hobby newHobby = new Hobby("Shopping", "very expensive hobby");
+        HobbyDTO hobbyDTO = new HobbyDTO(newHobby);
+        
+        given()
+                .contentType("application/json").body(hobbyDTO)
+                .when().post("/hobbies/add/")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+        EntityManager em = emf.createEntityManager();
+        try {
+            Hobby dbResult = em.createQuery("Select h from Hobby h WHERE h.name = :name", Hobby.class)
+                    .setParameter("name", (hobbyDTO.getName()))
+                    .getSingleResult();
+
+            assertEquals(hobbyDTO.getName(), dbResult.getName());
+            assertEquals(hobbyDTO.getDescription(), dbResult.getDescription());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+    
+    @Test
     public void testGetPersonsCountFromHobby() throws Exception {
+        Hobby expectedHobby = h1;
+        int expectedPersons = h1.getPersons().size();
         given()
         .contentType("application/json")
-        .get("/hobbies/countbyhobby/Hockey/").then()
+        .get("/hobbies/countbyhobby/"+expectedHobby.getName()).then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("count", equalTo(1)); 
+        .body("count", equalTo(expectedPersons)); 
     }
     
     @Test
     public void testGetPersonsCountFromHobbyNoPersonMatch() throws Exception {
         given()
         .contentType("application/json")
-        .get("/hobbies/countbyhobby/a").then()
+        .get("/hobbies/countbyhobby/aasgagwagfa").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .body("count", equalTo(0)); 
@@ -127,10 +187,11 @@ public class HobbiesResourceTest {
     
     @Test
     public void testGetPersonsFromHobby() throws Exception {
+        Hobby expectedHobby = h2;
         Person expectedPerson = p2;
         PersonsDTO dbList = given()
         .contentType("application/json")
-        .get("/hobbies/person/Football/").then()
+        .get("/hobbies/person/"+expectedHobby.getName()).then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
         .extract().body().as(PersonsDTO.class);

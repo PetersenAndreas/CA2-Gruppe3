@@ -62,11 +62,11 @@ public class PersonFacade {
     }
 
     // Get information about a person (address, hobbies etc) given a phone number
-    public PersonDTO getPersonInformationByPhone(Phone phone) {
+    public PersonDTO getPersonInformationByPhone(String number) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.phones = :phones", Person.class);
-            tq.setParameter("phones", phone);
+            TypedQuery<Person> tq = em.createQuery("SELECT p FROM Person p WHERE p.phones.number = :number", Person.class);
+            tq.setParameter("number", number);
             Person person = tq.getSingleResult();
             PersonDTO result = new PersonDTO(person);
             return result;

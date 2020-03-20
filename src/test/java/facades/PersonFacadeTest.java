@@ -1,6 +1,7 @@
 package facades;
 
 import dto.PersonDTO;
+import dto.PersonsDTO;
 import dto.PhoneDTO;
 import entities.Address;
 import entities.CityInfo;
@@ -8,6 +9,7 @@ import entities.Hobby;
 import entities.Person;
 import entities.Phone;
 import exceptions.InvalidInputException;
+import exceptions.NoResultFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,11 +31,12 @@ import utils.EMF_Creator.Strategy;
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static PersonFacade facade;
+    private static PersonFacade FACADE;
     private static Person person1, person2, person3, person4;
     private static CityInfo city1;
     private static Address address1;
     private static Hobby hobby1, hobby2, hobby3;
+    private static Phone phone1, phone2;
     private static Person[] personArray;
     private static Long highestId;
 
@@ -47,13 +50,13 @@ public class PersonFacadeTest {
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.DROP_AND_CREATE);
-        facade = PersonFacade.getPersonFacade(emf);
+        FACADE = PersonFacade.getPersonFacade(emf);
     }
 
     @BeforeAll
     public static void setUpClassV2() {
         emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST, Strategy.DROP_AND_CREATE);
-        facade = PersonFacade.getPersonFacade(emf);
+        FACADE = PersonFacade.getPersonFacade(emf);
     }
 
     @AfterAll
@@ -76,6 +79,8 @@ public class PersonFacadeTest {
             hobby1 = new Hobby("Chess", "Playing Chess");
             hobby2 = new Hobby("Sleeping", "The act of making no hobby into a hobby");
             hobby3 = new Hobby("Gaming", "Socialising by isolating");
+            phone1 = new Phone("12875981", "Home");
+            phone2 = new Phone("85927552", "Work");
             em.persist(person1);
             em.persist(person2);
             em.persist(person3);
@@ -84,6 +89,8 @@ public class PersonFacadeTest {
             em.persist(hobby1);
             em.persist(hobby2);
             em.persist(hobby3);
+            em.persist(phone1);
+            em.persist(phone2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -121,9 +128,36 @@ public class PersonFacadeTest {
 
     @Test
     public void testPersonFacade() {
-        long result = facade.getPersonCount();
+        long result = FACADE.getPersonCount();
         int expectedResult = personArray.length;
         assertEquals(expectedResult, result);
+    }
+    
+    @Test
+    public void testGetAllPersons() {
+        PersonsDTO result = FACADE.getAllPersons();
+        int expectedResult = personArray.length;
+        assertEquals(expectedResult, result.getPersons().size());
+        
+        List<Person> expectedPersons = new ArrayList(Arrays.asList(new Person[]{person1, person2, person3, person4}));
+        for (PersonDTO personDTO : result.getPersons()) {
+            String fName = personDTO.getFirstName();
+            String lName = personDTO.getLastName();
+            String email = personDTO.getEmail();
+            List<String> hobbies = personDTO.getHobbies();
+            boolean matchFound = false;
+            for (Person person : expectedPersons) {
+                boolean matchingFirstName = fName.equals(person.getFirstName());
+                boolean matchingLastName = lName.equals(person.getLastName());
+                boolean matchingEmail = email.equals(person.getEmail());
+                boolean matchingHobbies = hobbies.equals(person.getHobbies());
+                if (matchingFirstName && matchingLastName && matchingEmail && matchingHobbies) {
+                    matchFound = true;
+                    break;
+                }
+            }
+            assertTrue(matchFound);
+        }
     }
 
     @Test
@@ -132,13 +166,14 @@ public class PersonFacadeTest {
         testPerson.addAddressToPerson(address1);
         Long expectedId = highestId + 1;
         PersonDTO testPersonDTO = new PersonDTO(testPerson);
-        PersonDTO result = facade.addPerson(testPersonDTO);
+        PersonDTO result = FACADE.addPerson(testPersonDTO);
         assertEquals(expectedId, result.getId());
         assertTrue(testPerson.getFirstName().equals(result.getFirstName()));
+        assertTrue(testPerson.getAddress().getStreet().equals(result.getStreet()));
     }
 
     @Test
-    public void editPerson() throws InvalidInputException {
+    public void testEditPerson() throws InvalidInputException {
         Person expectedPerson = person1;
         Address expectedAddress = address1;
         List<Hobby> expectedHobbies = new ArrayList(Arrays.asList(new Hobby[]{hobby1, hobby2}));
@@ -156,7 +191,7 @@ public class PersonFacadeTest {
             expectedResult.getHobbies().add(expectedHobby.getName());
         }
 
-        facade.editPerson(expectedResult, expectedResult.getId());
+        FACADE.editPerson(expectedResult, expectedResult.getId());
 
         EntityManager em = emf.createEntityManager();
         try {
@@ -206,6 +241,28 @@ public class PersonFacadeTest {
         } finally {
             em.close();
         }
-
+    }
+    
+    @Test 
+    public void testGetPersonById() throws NoResultFoundException {
+        Long expectedID = person3.getId();
+        Person expectedPerson = person3;
+        PersonDTO result = FACADE.getPersonById(expectedID);
+        assertEquals(result.getId(), expectedID);
+        assertEquals(result.getFirstName(), expectedPerson.getFirstName());
+        assertEquals(result.getHobbies(), expectedPerson.getHobbies());
+    }
+    
+    @Test
+    public void testGetPersonInformationByPhone() {
+        //TODO
+//        person2.addPhoneToPerson(phone2);
+//        Person expectedPerson = person2;
+//        Phone expectedPhone = phone2;
+//        String searchPhone = phone2.getNumber();
+//        
+//        
+//        PersonDTO result = FACADE.getPersonInformationByPhone(searchPhone);
+//        assertTrue(expectedPerson.getEmail().equals(result.getEmail()));
     }
 }
