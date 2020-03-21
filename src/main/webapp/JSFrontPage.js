@@ -35,12 +35,22 @@ document.getElementById("addPhone").addEventListener("click", addPhone);
 
 function fetchAllPersons() {
     let url = "api/persons/";
-    let header = "<tr>" + "<th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone(s)</th><th>Description</th><th>Hobby</th><th>City</th><th>Street</th><th>Zip</th>" + "</tr>";
+    let header = "<tr>" + "<th>ID</th>"
+                        + "<th>First Name</th>"
+                        + "<th>Last Name</th>" 
+                        + "<th>Email</th>" 
+                        + "<th>Phone(s)</th>"
+                        + "<th>Description</th>"
+                        + "<th>Hobby</th>"
+                        + "<th>City</th>"
+                        + "<th>Street</th>"
+                        + "<th>Zip</th>" 
+                        + "</tr>";
     fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log("data", data);
-                document.getElementById("myDiv").innerHTML = "<table border='1' style='width: 80%;'>" + header + insertIntoTableFooters(data.persons) + "</table>";
+                document.getElementById("myDiv").innerHTML = "<table style='width: 80%;' class='table table-hover'>" + header + insertIntoTableFooters(data.persons) + "</table>";
             });
 }
 
@@ -48,7 +58,7 @@ function insertIntoTableFooters(data) {
     let htmlRows = "";
     data.forEach(e => {
         let temp = "<tr>"
-                + "<td>" + e.id + "</td>"
+                + "<th scope='col'>" + e.id + "</th>"
                 + "<td>" + e.firstName + "</td>"
                 + "<td>" + e.lastName + "</td>"
                 + "<td>" + e.email + "</td>"
@@ -68,7 +78,17 @@ function insertIntoTableFooters(data) {
 function fetchPersonOnId() {
     let searchId = document.getElementById("searchIdPer").value;
     let url = "api/persons/" + searchId;
-    let header = "<tr>" + "<th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone(s)</th><th>Description</th><th>Hobby</th><th>City</th><th>Street</th><th>Zip</th>" + "</tr>";
+    let header = "<tr>" + "<th>ID</th>"
+                        + "<th>First Name</th>"
+                        + "<th>Last Name</th>" 
+                        + "<th>Email</th>"
+                        + "<th>Phone(s)</th>"
+                        + "<th>Description</th>"
+                        + "<th>Hobby</th>"
+                        + "<th>City</th>"
+                        + "<th>Street</th>"
+                        + "<th>Zip</th>" 
+                        + "</tr>";
     fetch(url)
             .then(res => res.json())
             .then(data => {
@@ -79,7 +99,7 @@ function fetchPersonOnId() {
                     fetchAllPersons();
                     document.getElementById("error").innerHTML = data.message;
                 } else {
-                    document.getElementById("myDiv").innerHTML = "<table border='1' style='width: 80%;'>" + header + insertIntoTableFooters([data]) + "</table>";
+                    document.getElementById("myDiv").innerHTML = "<table style='width: 80%;' class='table table-striped'>" + header + insertIntoTableFooters([data]) + "</table>";
                 }
             });
 }
@@ -238,7 +258,68 @@ function editPhone() {
 }
 document.getElementById("edit_phone").addEventListener("click", editPhone);
 
+//City functions
 
+document.getElementById("getAllCities").addEventListener("click", getAllCitiesInfo);
+
+function getAllCitiesInfo() {
+    let url = "api/cities";
+    fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                console.log("data", data);
+
+                var header = "<tr>" +"<th>Zip-Code</th>"
+                                    + "<th>City</th>" 
+                           + "</tr>";
+
+                var tableBody = data.citiesInfo.map(info => {
+                    return "<tr><td>" + info.zipCode + "</td>" +
+                            "<td>" + info.cityName + "</td></tr>";
+                }).join("");
+                console.log(tableBody);
+                document.getElementById("myDiv").innerHTML = "<table style='width: 30%' class='table table-hover'>" +  header + tableBody + "</table>";
+            });
+}
+
+
+
+function getPersonsByZip() {
+
+    let zip = document.getElementById("zipID").value;
+    let url = "api/cities/" + zip;
+    fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                console.log("data", data);
+                var header = "<tr>" + "<th>ID</th>"
+                                    + "<th>First Name</th>"
+                                    + "<th>Last Name</th>"
+                                    + "<th>Email</th>"
+                                    + "<th>Phone(s)</th>"
+                                    + "<th>Description</th>" 
+                                    + "<th>Hobby</th>"
+                                    + "<th>City</th>" 
+                                    + "<th>Street</th>" 
+                                    + "</tr>";
+                var tableBody = data.persons.map(e => {
+                    return "<tr>"
+                            + "<th scope='row'>" + e.id + "</th>"
+                            + "<td>" + e.firstName + "</td>"
+                            + "<td>" + e.lastName + "</td>"
+                            + "<td>" + e.email + "</td>"
+                            + "<td>" + e.phones.phones.map(x => x.number).join("<br>") + "</td>"
+                            + "<td>" + e.phones.phones.map(x => x.description).join("<br>") + "</td>"
+                            + "<td>" + e.hobbies.join("<br>") + "</td>"
+                            + "<td>" + e.cityName + "</td>"
+                            + "<td>" + e.street + "</td>"
+                            + "</tr>";
+                }).join("");
+                console.log(tableBody);
+                document.getElementById("myDiv").innerHTML = "<table style='width: 80%' class='table table-hover'>" + header + tableBody + "</table>";
+            });
+}
+document.getElementById("get_persons_by_zip").addEventListener("click", getPersonsByZip);
 
 //Graveyard
 //function loadeCreate() {

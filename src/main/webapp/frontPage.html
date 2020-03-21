@@ -15,12 +15,13 @@ and open the template in the editor.
     </head>
     <body>
         <div style="margin-left: 50px; margin-top: 25px">
-            <h3>Gruppe 3 - Krak Program</h3>    
+            <h3>Gruppe 3 - Crack Program</h3>    
             <input type="text" name="searchIdPer" value="" id="searchIdPer" style="width: 40px" placeholder="ID..."/>
             <button id="searchIdBtn">Search Person on Id</button>
             <button id="rldAllBtn">Reloade table</button>
             <button id="createSelection" data-toggle="modal" data-target="#myModalCreate">Create Person</button>
             <button id="createSelection" data-toggle="modal" data-target="#myModalEdit">Edit Person</button>
+            <button id="createSelection" data-toggle="modal" data-target="#myModalCities">Cities</button>
             <p id="error"><br></p>
             <div id="myDiv"></div>
         </div>
@@ -63,7 +64,6 @@ and open the template in the editor.
                                 <option>Test 2</option>
                             </select>
                         </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="createPersonBtn">Create Person</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
@@ -75,7 +75,6 @@ and open the template in the editor.
         <!-- Modal -->
         <div class="modal fade" id="myModalEdit" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -96,9 +95,7 @@ and open the template in the editor.
                         <br>
                         <input id="inputPhoneDesE" type="text" name="idNumber" value="" style="width: 200px"/> Description
                         <p id="editPhones"></p>
-
                         <p>Hobbies:     <button id="edit_hobby">Add Hobby</button></p>
-
                         <select  name="Hobbies" id="inputHobbiesE" style="width: 200px">
                         </select><br>
                         <p id="hobby_list"></p>
@@ -108,9 +105,30 @@ and open the template in the editor.
                             <select name="Street" id="inputStreetE" style="width: 200px">
                             </select>
                         </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="edit_person">Edit Person</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModalCities" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Person</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Get All Cities With Zip</p>
+                        <button id="getAllCities">Get All Cities</button>
+                        <p>Enter zip to get all persons from that zip</p>
+                        <input id="zipID" type="text" name="idNumber" value="" placeholder="Enter zip"/>
+                        <button id="get_persons_by_zip"  value="src/Pers/By_ZIP">Search on Zip</button>
+                        <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
                         </div>
                     </div>
