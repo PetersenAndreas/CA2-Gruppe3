@@ -57,7 +57,7 @@ and open the template in the editor.
                             <br>
                             Hobby: name of a hobby</td>
                         <td></td>
-                        <td>“Count” : n</td>
+                        <td>“count” : n</td>
                         <td>(e1)</td>
                     </tr>
                     <tr>
@@ -82,6 +82,34 @@ and open the template in the editor.
                         <td></td>
                         <td>[phone, phone, ...](4)</td>
                         <td>(e1)</td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>/api/addresses</td>
+                        <td></td>
+                        <td>[address, address ...] (5)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>/api/addresses/count</td>
+                        <td></td>
+                        <td>“count” : n</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>POST</td>
+                        <td>/api/cities/add</td>
+                        <td>City (3)</td>
+                        <td>City (3)</td>
+                        <td>(e2), (e3)</td>
+                    </tr>
+                    <tr>
+                        <td>POST</td>
+                        <td>/api/addresses/add</td>
+                        <td>Address (5)</td>
+                        <td>Address (5)</td>
+                        <td>(e2), (e3)</td>
                     </tr>
                     <tr>
                         <td>POST</td>
@@ -122,10 +150,13 @@ and open the template in the editor.
                 "street": String,<br>
                 "cityName": String,<br>
                 "zip": String,<br>
+                "hobbies":{<br>
                 "hobbies":[<br>
                 "hobbyTitle": String,<br>
                 ...<br>
                 ]<br>
+                }<br>
+                "phones":{<br>
                 "phones":[<br>
                 {<br>
                 "phoneNumber": String,<br>
@@ -133,6 +164,7 @@ and open the template in the editor.
                 },<br>
                 ...<br>
                 ]<br>
+                }<br>
                 }<br>
                 <br>
                 <br>
@@ -162,6 +194,19 @@ and open the template in the editor.
                 "phoneNumber": String,<br>
                 "description": String<br>
                 }<br>
+                <br>
+                <br>
+                <br>
+                (5) Address format<br>
+                <br>
+                {<br>
+                "street": String,<br>
+                "city": {<br>
+                "zipCode": String<br>
+                "cityName": String<br>
+                }<br>
+                }<br>
+
                 <a href="https://docs.google.com/document/d/1arp2Y7LukwJBszDwQXzkhLhUl-DzIf9FpZLCU1x-TEw/edit?usp=sharing">Link for better formating</a>
             </div>
         </div>
